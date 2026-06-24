@@ -83,4 +83,19 @@ public class PresupuestoDAO {
             return ps.executeUpdate() > 0;
         }
     }
+
+    public boolean registrarPresupuesto(PresupuestoBean bean) {
+        String sql = "INSERT INTO TB_Presupuesto (periodo, montoTotal, montoDisponible, estado) VALUES (?, ?, ?, ?)";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, bean.getPeriodo());
+            ps.setDouble(2, bean.getMontoTotal());
+            ps.setDouble(3, bean.getMontoDisponible());
+            ps.setString(4, bean.getEstado());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error SQL detectado en PresupuestoDAO (registrar).", e);
+            return false;
+        }
+    }
 }

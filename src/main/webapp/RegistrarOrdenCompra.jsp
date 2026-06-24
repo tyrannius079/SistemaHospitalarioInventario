@@ -67,7 +67,7 @@
                                 <select class="form-select" id="idProforma" name="idProforma" required>
                                     <option value="" selected disabled>Seleccione Proforma...</option>
                                     <c:forEach var="prof" items="${proformas}">
-                                        <option value="${prof.idProforma}">#${prof.idProforma} - Total: S/ ${prof.montoTotal}</option>
+                                        <option value="${prof.idProforma}" data-proveedor="${prof.idProveedor}">#${prof.idProforma} - Total: S/ ${prof.montoTotal}</option>
                                     </c:forEach>
                                     <c:if test="${empty proformas}">
                                         <option value="1">PROF-001 - Total: S/ 58.50</option>
@@ -145,6 +145,43 @@
         // Auto-llenar fecha de emisión con fecha actual bloqueada
         const fechaActual = new Date().toISOString().split('T')[0];
         document.getElementById('fechaEmision').value = fechaActual;
+
+        // --- PUNTO 1: Filtrado Dinámico de Proformas por Proveedor ---
+        const selectProveedor = document.getElementById('idProveedor');
+        const selectProforma = document.getElementById('idProforma');
+
+        selectProveedor.addEventListener('change', function() {
+            const idProv = this.value;
+            // Solo buscar options que tengan el atributo data-proveedor
+            const opcionesProforma = selectProforma.querySelectorAll('option[data-proveedor]');
+            
+            // Limpiar la selección actual
+            selectProforma.value = "";
+            
+            let tieneProformas = false;
+            opcionesProforma.forEach(opt => {
+                if (opt.getAttribute('data-proveedor') === idProv) {
+                    opt.style.display = 'block'; // Mostrar
+                    tieneProformas = true;
+                } else {
+                    opt.style.display = 'none';  // Ocultar
+                }
+            });
+
+            if(idProv !== "" && !tieneProformas && opcionesProforma.length > 0) {
+                // Alerta suave (Toast) indicando que este proveedor no nos ha cotizado nada
+                Swal.fire({
+                    toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
+                    icon: 'warning', title: 'Este proveedor no tiene proformas registradas.'
+                });
+            }
+        });
+
+        // Si la página se recarga y ya había un proveedor seleccionado, disparar el filtro automáticamente
+        if(selectProveedor.value) {
+            selectProveedor.dispatchEvent(new Event('change'));
+        }
+        // --- FIN PUNTO 1 ---
 
         // Validación
         const formOC = document.getElementById('formOrdenCompra');

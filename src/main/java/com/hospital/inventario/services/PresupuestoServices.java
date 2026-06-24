@@ -26,4 +26,21 @@ public class PresupuestoServices implements IPresupuestoServices {
     public PresupuestoBean consultarPresupuesto(int idPresupuesto) {
         return presupuestoDAO.consultarPresupuesto(idPresupuesto);
     }
+
+    @Override
+    public boolean registrarPresupuesto(PresupuestoBean bean) {
+        // Reglas de negocio básicas
+        if (bean == null || bean.getMontoTotal() <= 0 || bean.getPeriodo() == null || bean.getPeriodo().trim().isEmpty()) {
+            return false;
+        }
+        
+        // Al registrar, el disponible inicia igual al total
+        bean.setMontoDisponible(bean.getMontoTotal());
+        
+        if (bean.getEstado() == null || bean.getEstado().trim().isEmpty()) {
+            bean.setEstado("ACTIVO");
+        }
+        
+        return presupuestoDAO.registrarPresupuesto(bean);
+    }
 }
