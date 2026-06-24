@@ -15,9 +15,21 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class OrdenCompraServices implements IOrdenCompraServices {
-    private final OrdenCompraDAO ordenCompraDAO = new OrdenCompraDAO();
-    private final ProveedorDAO proveedorDAO = new ProveedorDAO();
-    private final PresupuestoDAO presupuestoDAO = new PresupuestoDAO();
+    private final OrdenCompraDAO ordenCompraDAO;
+    private final ProveedorDAO proveedorDAO;
+    private final PresupuestoDAO presupuestoDAO;
+
+    public OrdenCompraServices() {
+        this.ordenCompraDAO = new OrdenCompraDAO();
+        this.proveedorDAO = new ProveedorDAO();
+        this.presupuestoDAO = new PresupuestoDAO();
+    }
+
+    public OrdenCompraServices(OrdenCompraDAO ordenCompraDAO, ProveedorDAO proveedorDAO, PresupuestoDAO presupuestoDAO) {
+        this.ordenCompraDAO = ordenCompraDAO;
+        this.proveedorDAO = proveedorDAO;
+        this.presupuestoDAO = presupuestoDAO;
+    }
 
     @Override
     public List<OrdenCompraBean> getOrdenes() {

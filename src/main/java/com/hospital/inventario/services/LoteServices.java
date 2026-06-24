@@ -8,7 +8,15 @@ import java.sql.Date;
 import java.util.List;
 
 public class LoteServices implements ILoteServices {
-    private final LoteDAO loteDAO = new LoteDAO();
+    private final LoteDAO loteDAO;
+
+    public LoteServices() {
+        this.loteDAO = new LoteDAO();
+    }
+
+    public LoteServices(LoteDAO loteDAO) {
+        this.loteDAO = loteDAO;
+    }
 
     @Override
     public List<LoteBean> getLotes() {

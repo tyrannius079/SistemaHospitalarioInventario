@@ -7,7 +7,15 @@ import com.hospital.inventario.services.interfaces.IProformaServices;
 import java.util.List;
 
 public class ProformaServices implements IProformaServices {
-    private final ProformaDAO proformaDAO = new ProformaDAO();
+    private final ProformaDAO proformaDAO;
+
+    public ProformaServices() {
+        this.proformaDAO = new ProformaDAO();
+    }
+
+    public ProformaServices(ProformaDAO proformaDAO) {
+        this.proformaDAO = proformaDAO;
+    }
 
     @Override
     public List<ProformaBean> getProformas() {

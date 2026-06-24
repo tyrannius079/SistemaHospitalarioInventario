@@ -7,7 +7,15 @@ import com.hospital.inventario.services.interfaces.IUsuarioServices;
 import java.util.List;
 
 public class UsuarioServices implements IUsuarioServices {
-    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private final UsuarioDAO usuarioDAO;
+
+    public UsuarioServices() {
+        this.usuarioDAO = new UsuarioDAO();
+    }
+
+    public UsuarioServices(UsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
+    }
 
     @Override
     public List<UsuarioBean> getUsuarios() {
