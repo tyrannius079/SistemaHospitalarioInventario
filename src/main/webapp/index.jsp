@@ -37,6 +37,11 @@
           <span class="titulo">Consultar Stock Global</span>
           <span class="texto">Ver disponibilidad actual de insumos y alertas.</span>
         </a>
+        <a class="menu-item" href="${pageContext.request.contextPath}/ajuste-inventario">
+          <span class="icono">&#9888;&#65039;</span>
+          <span class="titulo">Registrar Salida / Ajuste</span>
+          <span class="texto">Declarar mermas, vencimientos o retiro de insumos.</span>
+        </a>
       </div>
     </div>
   </main>
