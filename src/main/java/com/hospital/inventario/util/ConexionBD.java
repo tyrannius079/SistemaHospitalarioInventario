@@ -3,8 +3,11 @@ package com.hospital.inventario.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConexionBD {
+    private static final Logger logger = LoggerFactory.getLogger(ConexionBD.class);
     private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/hospitaldb?useSSL=false&serverTimezone=UTC";
     private static final String DEFAULT_USER = "hospital";
     private static final String DEFAULT_PASSWORD = "hospital";
@@ -31,7 +34,7 @@ public class ConexionBD {
             try {
                 conn.close();
             } catch (SQLException e) {
-                // Ignore close errors
+                logger.error("Error al establecer conexión con la base de datos.", e);
             }
         }
     }

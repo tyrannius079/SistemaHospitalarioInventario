@@ -9,8 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InsumoDAO {
+    private static final Logger logger = LoggerFactory.getLogger(InsumoDAO.class);
 
     public InsumoBean consultarInsumo(int idInsumo) {
         String sql = "SELECT * FROM TB_Insumo WHERE idInsumo = ?";
@@ -34,6 +37,7 @@ public class InsumoDAO {
                 }
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO (null).", e);
             return null;
         }
         return null;
@@ -60,6 +64,7 @@ public class InsumoDAO {
                 lista.add(bean);
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -81,6 +86,7 @@ public class InsumoDAO {
             ps.setString(9, bean.getEstado());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO.", e);
             return false;
         }
     }
@@ -93,6 +99,7 @@ public class InsumoDAO {
             ps.setInt(2, idInsumo);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO.", e);
             return false;
         }
     }

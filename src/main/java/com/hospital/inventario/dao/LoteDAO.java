@@ -11,8 +11,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoteDAO {
+    private static final Logger logger = LoggerFactory.getLogger(LoteDAO.class);
 
     public boolean registrarLote(LoteBean bean) {
         String sql = "INSERT INTO TB_Lote (numeroLote, idInsumo, fechaIngreso, fechaVencimiento, "
@@ -36,6 +39,7 @@ public class LoteDAO {
                 return true;
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en LoteDAO.", e);
             return false;
         }
         return false;
@@ -51,6 +55,7 @@ public class LoteDAO {
                 lista.add(mapLote(rs));
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en LoteDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -66,6 +71,7 @@ public class LoteDAO {
                 lista.add(mapLote(rs));
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en LoteDAO (lista).", e);
             return lista;
         }
         return lista;

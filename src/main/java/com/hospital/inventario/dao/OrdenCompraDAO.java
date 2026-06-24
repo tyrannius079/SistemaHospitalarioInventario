@@ -12,8 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OrdenCompraDAO {
+    private static final Logger logger = LoggerFactory.getLogger(OrdenCompraDAO.class);
 
     public int registrarOrden(OrdenCompraBean bean, Connection conn) throws SQLException {
         String sql = "INSERT INTO TB_OrdenCompra (idSolicitud, idProforma, idProveedor, idUsuario, "
@@ -68,6 +71,7 @@ public class OrdenCompraDAO {
                 return rs.next();
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en OrdenCompraDAO.", e);
             return false;
         }
     }
@@ -94,6 +98,7 @@ public class OrdenCompraDAO {
                 }
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en OrdenCompraDAO (null).", e);
             return null;
         }
         return null;
@@ -120,6 +125,7 @@ public class OrdenCompraDAO {
                 lista.add(bean);
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en OrdenCompraDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -134,6 +140,7 @@ public class OrdenCompraDAO {
             ps.setInt(3, bean.getIdOrdenCompra());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en OrdenCompraDAO.", e);
             return false;
         }
     }

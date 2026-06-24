@@ -10,8 +10,11 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PresupuestoDAO {
+    private static final Logger logger = LoggerFactory.getLogger(PresupuestoDAO.class);
 
     public List<PresupuestoBean> getPresupuestos() {
         List<PresupuestoBean> lista = new ArrayList<>();
@@ -29,7 +32,8 @@ public class PresupuestoDAO {
                 lista.add(bean);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error SQL detectado en PresupuestoDAO (lista).", e);
+            return lista;
         }
         return lista;
     }
@@ -38,6 +42,7 @@ public class PresupuestoDAO {
         try (Connection conn = ConexionBD.getConnection()) {
             return consultarPresupuesto(conn, idPresupuesto);
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en PresupuestoDAO (null).", e);
             return null;
         }
     }
@@ -65,6 +70,7 @@ public class PresupuestoDAO {
         try (Connection conn = ConexionBD.getConnection()) {
             return actualizarDisponible(conn, idPresupuesto, nuevoDisponible);
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en PresupuestoDAO.", e);
             return false;
         }
     }

@@ -9,8 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UsuarioDAO {
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioDAO.class);
 
     public List<UsuarioBean> getUsuarios() {
         List<UsuarioBean> lista = new ArrayList<>();

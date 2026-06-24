@@ -9,8 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProveedorDAO {
+    private static final Logger logger = LoggerFactory.getLogger(ProveedorDAO.class);
 
     public boolean existeProveedor(int idProveedor) {
         String sql = "SELECT 1 FROM TB_Proveedor WHERE idProveedor = ?";
@@ -21,6 +24,7 @@ public class ProveedorDAO {
                 return rs.next();
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en ProveedorDAO.", e);
             return false;
         }
     }
@@ -44,6 +48,7 @@ public class ProveedorDAO {
                 }
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en ProveedorDAO (null).", e);
             return null;
         }
         return null;
@@ -67,6 +72,7 @@ public class ProveedorDAO {
                 lista.add(bean);
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en ProveedorDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -85,6 +91,7 @@ public class ProveedorDAO {
             ps.setString(6, bean.getEstado());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en ProveedorDAO.", e);
             return false;
         }
     }

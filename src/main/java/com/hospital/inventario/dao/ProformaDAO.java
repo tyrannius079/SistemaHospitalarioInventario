@@ -9,8 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProformaDAO {
+    private static final Logger logger = LoggerFactory.getLogger(ProformaDAO.class);
 
     public List<ProformaBean> getProformas() {
         List<ProformaBean> lista = new ArrayList<>();
@@ -29,6 +32,7 @@ public class ProformaDAO {
                 lista.add(bean);
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en ProformaDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -46,6 +50,7 @@ public class ProformaDAO {
             ps.setString(5, bean.getEstado());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en ProformaDAO.", e);
             return false;
         }
     }
