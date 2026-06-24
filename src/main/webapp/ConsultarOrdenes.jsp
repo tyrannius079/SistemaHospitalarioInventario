@@ -47,7 +47,19 @@
                 <td>${orden.idProveedor}</td>
                 <td>${orden.fechaEmision}</td>
                 <td>${orden.total}</td>
-                <td><span class="badge badge-info">${orden.estado}</span></td>
+                <td>
+                  <form action="${pageContext.request.contextPath}/orden-compra" method="POST" style="display:flex; gap:5px;">
+                    <input type="hidden" name="action" value="actualizar" />
+                    <input type="hidden" name="idOrdenCompra" value="${orden.idOrdenCompra}" />
+                    <select name="estado" style="padding: 2px;">
+                      <option value="EMITIDA" ${orden.estado == 'EMITIDA' ? 'selected' : ''}>EMITIDA</option>
+                      <option value="APROBADA" ${orden.estado == 'APROBADA' ? 'selected' : ''}>APROBADA</option>
+                      <option value="RECEPCIONADA" ${orden.estado == 'RECEPCIONADA' ? 'selected' : ''}>RECEPCIONADA</option>
+                      <option value="ANULADA" ${orden.estado == 'ANULADA' ? 'selected' : ''}>ANULADA</option>
+                    </select>
+                    <button type="submit" class="btn" style="padding: 2px 8px;">✔️</button>
+                  </form>
+                </td>
                 <td>${orden.observaciones}</td>
               </tr>
             </c:forEach>

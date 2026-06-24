@@ -42,6 +42,11 @@
           <span class="titulo">Registrar Salida / Ajuste</span>
           <span class="texto">Declarar mermas, vencimientos o retiro de insumos.</span>
         </a>
+        <a class="menu-item" href="${pageContext.request.contextPath}/alertas" style="border-left: 4px solid #dc3545;">
+          <span class="icono">&#128680;</span>
+          <span class="titulo">Panel de Alertas</span>
+          <span class="texto">Monitoreo crítico de stocks y fechas de vencimiento.</span>
+        </a>
       </div>
     </div>
   </main>

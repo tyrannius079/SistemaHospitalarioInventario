@@ -51,6 +51,26 @@ public class OrdenCompraServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        String action = request.getParameter("action");
+        if ("actualizar".equals(action)) {
+            int idOrdenCompra = parseInt(request.getParameter("idOrdenCompra"));
+            String estado = safeText(request.getParameter("estado"));
+            
+            OrdenCompraBean bean = new OrdenCompraBean();
+            bean.setIdOrdenCompra(idOrdenCompra);
+            bean.setEstado(estado);
+            bean.setObservaciones("Estado actualizado a " + estado);
+            
+            boolean ok = ordenCompraServices.modificarOrden(bean);
+            if (ok) {
+                response.sendRedirect(request.getContextPath() + "/orden-compra?action=listar");
+            } else {
+                request.setAttribute("error", "No se pudo actualizar el estado de la orden.");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+            }
+            return;
+        }
+
         OrdenCompraBean bean = new OrdenCompraBean();
         bean.setIdSolicitud(parseInt(request.getParameter("idSolicitud")));
         bean.setIdProforma(parseInt(request.getParameter("idProforma")));
