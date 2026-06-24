@@ -3,7 +3,8 @@ USE hospitaldb;
 INSERT INTO TB_Usuario (dni, nombres, apellidos, email, password, rol, estado)
 VALUES
   ('12345678', 'Juan', 'Perez', 'juan.perez@hospital.local', '123456', 'JEFE_COMPRA', 'A'),
-  ('87654321', 'Maria', 'Lopez', 'maria.lopez@hospital.local', '123456', 'TECNICO_ALMACEN', 'A');
+  ('87654321', 'Maria', 'Lopez', 'maria.lopez@hospital.local', '123456', 'TECNICO_ALMACEN', 'A'),
+  ('99999999', 'Admin', 'Sistema', 'admin@hospital.local', 'admin123', 'ADMIN', 'A');
 
 INSERT INTO TB_Proveedor (razonSocial, ruc, direccion, telefono, email, estado)
 VALUES

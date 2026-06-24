@@ -30,4 +30,25 @@ public class UsuarioDAO {
         }
         return lista;
     }
+
+    public UsuarioBean validarLogin(String dni, String password) {
+        String sql = "SELECT * FROM TB_Usuario WHERE dni = ? AND password = ? AND estado = 'A'";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, dni);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    UsuarioBean bean = new UsuarioBean();
+                    bean.setIdUsuario(rs.getInt("idUsuario"));
+                    bean.setNombre(rs.getString("nombres") + " " + rs.getString("apellidos"));
+                    bean.setRol(rs.getString("rol"));
+                    return bean;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

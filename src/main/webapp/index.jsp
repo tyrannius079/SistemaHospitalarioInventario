@@ -32,6 +32,11 @@
           <span class="titulo">Registrar Entrada de Insumos</span>
           <span class="texto">Registrar y consultar entradas al inventario.</span>
         </a>
+        <a class="menu-item" href="${pageContext.request.contextPath}/inventario?action=stock">
+          <span class="icono">&#128202;</span>
+          <span class="titulo">Consultar Stock Global</span>
+          <span class="texto">Ver disponibilidad actual de insumos y alertas.</span>
+        </a>
       </div>
     </div>
   </main>

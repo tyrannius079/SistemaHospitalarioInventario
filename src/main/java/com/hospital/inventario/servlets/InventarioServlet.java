@@ -33,6 +33,9 @@ public class InventarioServlet extends HttpServlet {
         if ("listar".equals(action)) {
             request.setAttribute("movimientos", movimientoServices.getMovimientos());
             request.getRequestDispatcher("/ConsultarEntradas.jsp").forward(request, response);
+        } else if ("stock".equals(action)) {
+            request.setAttribute("insumos", insumoServices.getInsumos());
+            request.getRequestDispatcher("/ConsultarStock.jsp").forward(request, response);
         } else {
             request.setAttribute("ordenes", ordenCompraServices.getOrdenes());
             request.setAttribute("insumos", insumoServices.getInsumos());

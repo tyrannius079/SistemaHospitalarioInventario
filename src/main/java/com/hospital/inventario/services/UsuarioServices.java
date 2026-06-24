@@ -13,4 +13,9 @@ public class UsuarioServices implements IUsuarioServices {
     public List<UsuarioBean> getUsuarios() {
         return usuarioDAO.getUsuarios();
     }
+
+    @Override
+    public UsuarioBean validarLogin(String dni, String password) {
+        return usuarioDAO.validarLogin(dni, password);
+    }
 }
