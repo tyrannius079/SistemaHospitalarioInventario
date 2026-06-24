@@ -103,6 +103,17 @@
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
+      <!-- Plugin para ejecutar el proyecto localmente sin instalar Tomcat externo -->
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>11.0.20</version>
+        <configuration>
+            <webApp>
+                <contextPath>/</contextPath>
+            </webApp>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
