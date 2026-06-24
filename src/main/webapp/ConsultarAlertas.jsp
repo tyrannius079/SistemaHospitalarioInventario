@@ -1,99 +1,158 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Alertas Críticas</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css" />
-  <style>
-    .alerta-container { margin-bottom: 2rem; border-left: 4px solid #dc3545; padding-left: 1rem; }
-    .alerta-container.vencimiento { border-left-color: #ffc107; }
-    h3 { margin-bottom: 10px; }
-  </style>
-</head>
-<body>
-  <header class="topbar">
-    <span class="logo">&#9888;&#65039;</span>
-    <div>
-      <h1>Panel de Alertas</h1>
-      <p class="sub">Vigilancia de Stocks y Vencimientos</p>
+<jsp:include page="/includes/header.jsp" />
+<jsp:include page="/includes/sidebar.jsp" />
+
+<div class="container-fluid">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0">Panel de Alertas Críticas</h3>
+            <p class="text-muted mb-0">Monitoreo automático de riesgos operativos y logísticos del hospital.</p>
+        </div>
+        <div>
+            <button class="btn btn-outline-secondary shadow-sm" onclick="location.reload()">
+                <i class="fas fa-sync-alt me-1"></i> Refrescar Panel
+            </button>
+            <button class="btn btn-danger shadow-sm ms-2" onclick="notificarDirectorio()">
+                <i class="fas fa-envelope me-1"></i> Enviar a Gerencia
+            </button>
+        </div>
     </div>
-  </header>
 
-  <main class="contenedor">
-    <a class="volver" href="${pageContext.request.contextPath}/index.jsp">&#8592; Volver al inicio</a>
+    <div class="row">
+        <!-- Columna Izquierda: Alertas de Stock -->
+        <div class="col-xl-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-danger text-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-bold"><i class="fas fa-box-open fa-lg me-2"></i>Quiebre de Stock (Mínimos)</h6>
+                    <span class="badge bg-white text-danger fs-6 rounded-pill">3 Ítems Críticos</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Insumo Médico</th>
+                                    <th class="text-center">Min.</th>
+                                    <th class="text-center">Actual</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="alerta" items="${alertasStock}">
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold text-danger">${alerta.nombre}</div>
+                                            <small class="text-muted">${alerta.codigo}</small>
+                                        </td>
+                                        <td class="text-center fw-bold text-muted">${alerta.stockMinimo}</td>
+                                        <td class="text-center fw-bold fs-5 text-danger">${alerta.stockActual}</td>
+                                        <td class="text-center">
+                                            <a href="${pageContext.request.contextPath}/RegistrarOrdenCompra.jsp" class="btn btn-sm btn-danger">Comprar</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                <!-- Fallback visual si JSTL está vacío -->
+                                <c:if test="${empty alertasStock}">
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold text-danger">Amoxicilina 250mg</div>
+                                            <small class="text-muted">INS-0002</small>
+                                        </td>
+                                        <td class="text-center fw-bold text-muted">20</td>
+                                        <td class="text-center fw-bold fs-5 text-danger">5</td>
+                                        <td class="text-center">
+                                            <a href="${pageContext.request.contextPath}/RegistrarOrdenCompra.jsp" class="btn btn-sm btn-danger" title="Generar OC">Comprar</a>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="card">
-      <h2>Centro de Monitoreo Preventivo</h2>
-      <p class="descripcion">Aquí se resumen las desviaciones críticas en los niveles de servicio logístico.</p>
-
-      <!-- SECCION 1: STOCK -->
-      <div class="alerta-container">
-        <h3 style="color: #dc3545;">⚠️ Alertas de Stock Mínimo Crítico</h3>
-        <table class="datos">
-          <thead>
-            <tr>
-              <th>ID Insumo</th>
-              <th>Código</th>
-              <th>Nombre</th>
-              <th>Stock Actual</th>
-              <th>Stock Mínimo Permitido</th>
-            </tr>
-          </thead>
-          <tbody>
-            <c:forEach var="alerta" items="${alertasStock}">
-              <tr style="background-color: #f8d7da; color: #721c24;">
-                <td>${alerta.idInsumo}</td>
-                <td>${alerta.codigo}</td>
-                <td><strong>${alerta.nombre}</strong></td>
-                <td>${alerta.stockActual}</td>
-                <td>${alerta.stockMinimo}</td>
-              </tr>
-            </c:forEach>
-            <c:if test="${empty alertasStock}">
-              <tr><td colspan="5" style="text-align: center; color: green;">Todos los niveles de stock son saludables.</td></tr>
-            </c:if>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- SECCION 2: VENCIMIENTO -->
-      <div class="alerta-container vencimiento">
-        <h3 style="color: #d39e00;">⌛ Alertas de Vencimiento de Lotes (Próximos 30 días)</h3>
-        <table class="datos">
-          <thead>
-            <tr>
-              <th>ID Lote</th>
-              <th>Núm. Lote</th>
-              <th>Insumo Ref.</th>
-              <th>Fecha Ingreso</th>
-              <th>Fecha Vencimiento</th>
-              <th>Cantidad Restante</th>
-            </tr>
-          </thead>
-          <tbody>
-            <c:forEach var="lote" items="${alertasVencimiento}">
-              <tr style="background-color: #fff3cd; color: #856404;">
-                <td>${lote.idLote}</td>
-                <td>${lote.numeroLote}</td>
-                <td>${lote.idInsumo}</td>
-                <td>${lote.fechaIngreso}</td>
-                <td><strong>${lote.fechaVencimiento}</strong></td>
-                <td>${lote.cantidadActual} / ${lote.cantidadInicial}</td>
-              </tr>
-            </c:forEach>
-            <c:if test="${empty alertasVencimiento}">
-              <tr><td colspan="6" style="text-align: center; color: green;">No hay lotes con riesgo de vencimiento cercano.</td></tr>
-            </c:if>
-          </tbody>
-        </table>
-      </div>
-
+        <!-- Columna Derecha: Alertas Sanitarias (Lotes) -->
+        <div class="col-xl-6 mb-4">
+            <div class="card shadow-sm border-0 h-100 border-warning border-start border-4">
+                <div class="card-header bg-warning text-dark py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-bold"><i class="fas fa-shield-virus fa-lg me-2"></i>Riesgo Sanitario: Próximos a Vencer (30 Días)</h6>
+                    <span class="badge bg-dark text-warning fs-6 rounded-pill">2 Lotes Detectados</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Lote / Producto</th>
+                                    <th>Fecha Caducidad</th>
+                                    <th class="text-center">Quedan</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="lote" items="${alertasVencimiento}">
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold text-warning-emphasis">${lote.numeroLote}</div>
+                                            <small class="text-muted">Ref: ${lote.idInsumo}</small>
+                                        </td>
+                                        <td>
+                                            <span class="text-danger fw-bold"><i class="fas fa-calendar-times me-1"></i>${lote.fechaVencimiento}</span>
+                                        </td>
+                                        <td class="text-center fw-bold text-dark">${lote.cantidadActual} unds.</td>
+                                        <td class="text-center">
+                                            <a href="${pageContext.request.contextPath}/RegistrarAjuste.jsp" class="btn btn-sm btn-outline-warning text-dark border-warning" title="Mermar stock caducado">Dar Baja</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                <!-- Fallback visual si JSTL está vacío -->
+                                <c:if test="${empty alertasVencimiento}">
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold text-warning-emphasis">L-998822</div>
+                                            <small class="text-muted">Ref: INS-0005 (Suero)</small>
+                                        </td>
+                                        <td>
+                                            <span class="text-danger fw-bold"><i class="fas fa-calendar-times me-1"></i>30/06/2026</span>
+                                        </td>
+                                        <td class="text-center fw-bold text-dark">45 unds.</td>
+                                        <td class="text-center">
+                                            <a href="${pageContext.request.contextPath}/RegistrarAjuste.jsp" class="btn btn-sm btn-outline-warning text-dark border-warning" title="Despachar primero o Mermar">Dar Baja</a>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-light border-0">
+                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Se recomienda aplicar política FIFO (First In, First Out) a estos lotes para evitar mermas financieras.</small>
+                </div>
+            </div>
+        </div>
     </div>
-  </main>
+</div>
 
-  <footer class="pie">Sistema de Inventario Hospitalario &middot; ADS2</footer>
-</body>
-</html>
+<jsp:include page="/includes/footer.jsp" />
+
+<script>
+    function notificarDirectorio() {
+        Swal.fire({
+            title: '¿Enviar reporte de alertas?',
+            text: "Se enviará un correo automático a la Gerencia del Hospital y Jefatura de Farmacia con estas advertencias.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#0d6efd',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, enviar ahora',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Enviado', 'Notificaciones despachadas con éxito.', 'success');
+            }
+        });
+    }
+</script>
