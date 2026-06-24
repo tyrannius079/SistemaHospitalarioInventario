@@ -11,4 +11,5 @@ FROM tomcat:11.0-jdk25-temurin
 RUN rm -rf /usr/local/tomcat/webapps/ROOT /usr/local/tomcat/webapps/ROOT.war
 COPY --from=build /app/target/sistema-inventario-hospital.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
+
 CMD ["catalina.sh", "run"]
