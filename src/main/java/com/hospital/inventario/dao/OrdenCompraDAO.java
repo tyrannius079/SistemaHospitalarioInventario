@@ -62,6 +62,36 @@ public class OrdenCompraDAO {
         }
     }
 
+    public List<DetalleOrdenCompraBean> getDetallesPorOrden(int idOrdenCompra) {
+        List<DetalleOrdenCompraBean> lista = new ArrayList<>();
+        String sql = "SELECT d.*, i.nombre AS nombreInsumo, i.codigo AS codigoInsumo "
+                + "FROM TB_DetalleOrdenCompra d "
+                + "JOIN TB_Insumo i ON d.idInsumo = i.idInsumo "
+                + "WHERE d.idOrdenCompra = ?";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setInt(1, idOrdenCompra);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    DetalleOrdenCompraBean bean = new DetalleOrdenCompraBean();
+                    bean.setIdDetalle(rs.getInt("idDetalle"));
+                    bean.setIdOrdenCompra(rs.getInt("idOrdenCompra"));
+                    bean.setIdInsumo(rs.getInt("idInsumo"));
+                    bean.setCantidad(rs.getInt("cantidad"));
+                    bean.setPrecioUnitario(rs.getDouble("precioUnitario"));
+                    bean.setSubtotal(rs.getDouble("subtotal"));
+                    bean.setNombreInsumo(rs.getString("nombreInsumo"));
+                    bean.setCodigoInsumo(rs.getString("codigoInsumo"));
+                    lista.add(bean);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Error al obtener detalles de la orden de compra " + idOrdenCompra, e);
+        }
+        return lista;
+    }
+
     public boolean existeOrdenCompra(int idOrdenCompra) {
         String sql = "SELECT 1 FROM TB_OrdenCompra WHERE idOrdenCompra = ?";
         try (Connection conn = ConexionBD.getConnection();

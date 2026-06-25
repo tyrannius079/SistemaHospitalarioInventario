@@ -112,6 +112,16 @@ public class OrdenCompraServices implements IOrdenCompraServices {
     }
 
     @Override
+    public boolean actualizarEstadoOrden(int idOrdenCompra, int idEstado) {
+        return ordenCompraDAO.actualizarEstadoOrden(idOrdenCompra, idEstado);
+    }
+
+    @Override
+    public List<DetalleOrdenCompraBean> getDetallesPorOrden(int idOrdenCompra) {
+        return ordenCompraDAO.getDetallesPorOrden(idOrdenCompra);
+    }
+
+    @Override
     public OrdenCompraBean consultarOrden(int idOrdenCompra) {
         return ordenCompraDAO.consultarOrden(idOrdenCompra);
     }

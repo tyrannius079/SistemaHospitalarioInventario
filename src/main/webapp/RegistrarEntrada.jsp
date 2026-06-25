@@ -65,14 +65,8 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="idInsumo" class="form-label">Insumo Recibido *</label>
-                                        <select class="form-select" name="idInsumo" id="idInsumo" required>
-                                            <option value="" disabled selected>Seleccione insumo físico...</option>
-                                            <c:forEach var="ins" items="${insumos}">
-                                                <option value="${ins.idInsumo}">${ins.nombre} (Stock actual: ${ins.stockActual})</option>
-                                            </c:forEach>
-                                            <c:if test="${empty insumos}">
-                                                <option value="" disabled>No hay insumos</option>
-                                            </c:if>
+                                        <select class="form-select" name="idInsumo" id="idInsumo" required disabled>
+                                            <option value="" disabled selected>Primero seleccione una Orden de Compra...</option>
                                         </select>
                                     </div>
 
@@ -130,8 +124,60 @@
         // Validación HTML5 para que Fecha de Vencimiento sea mayor a hoy
         const hoy = new Date();
         hoy.setDate(hoy.getDate() + 1); // Mínimo mañana
-        const mañanaStr = hoy.toISOString().split('T')[0];
-        document.getElementById('fechaVencimiento').setAttribute('min', mañanaStr);
+        const maanaStr = hoy.toISOString().split('T')[0];
+        document.getElementById('fechaVencimiento').setAttribute('min', maanaStr);
+
+        // --- Filtrado dinámico de Insumos por Orden de Compra ---
+        const selectOC = document.getElementById('idOrdenCompra');
+        const selectInsumo = document.getElementById('idInsumo');
+        const inputCantidad = document.getElementById('cantidad');
+        
+        selectOC.addEventListener('change', function() {
+            const idOrden = this.value;
+            if(!idOrden) return;
+            
+            selectInsumo.disabled = true;
+            selectInsumo.innerHTML = '<option value="" disabled selected>Cargando insumos...</option>';
+            inputCantidad.value = '';
+            
+            fetch('${pageContext.request.contextPath}/orden-compra?action=detalles_json&idOrdenCompra=' + idOrden)
+                .then(response => response.json())
+                .then(data => {
+                    selectInsumo.innerHTML = '<option value="" disabled selected>Seleccione el insumo recibido...</option>';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(det => {
+                            const opt = document.createElement('option');
+                            opt.value = det.idInsumo;
+                            opt.text = det.codigoInsumo + ' - ' + det.nombreInsumo + ' (Pendientes: ' + det.cantidad + ' unid)';
+                            opt.setAttribute('data-max', det.cantidad);
+                            selectInsumo.appendChild(opt);
+                        });
+                        selectInsumo.disabled = false;
+                        
+                        Swal.fire({
+                            toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
+                            icon: 'success', title: 'Insumos de la OC cargados correctamente.'
+                        });
+                    } else {
+                        selectInsumo.innerHTML = '<option value="" disabled selected>Esta OC no tiene insumos o ya fue procesada</option>';
+                        Swal.fire('Atención', 'La Orden de Compra seleccionada no tiene insumos pendientes de recibir.', 'warning');
+                    }
+                })
+                .catch(err => {
+                    console.error("Error obteniendo detalles:", err);
+                    selectInsumo.innerHTML = '<option value="" disabled selected>Error de conexión</option>';
+                    Swal.fire('Error', 'No se pudieron cargar los insumos de la orden.', 'error');
+                });
+        });
+
+        // Opcional: auto-validar que la cantidad ingresada no supere lo pedido en la OC
+        selectInsumo.addEventListener('change', function() {
+            const selectedOpt = this.options[this.selectedIndex];
+            if(selectedOpt && selectedOpt.hasAttribute('data-max')) {
+                inputCantidad.max = selectedOpt.getAttribute('data-max');
+            }
+        });
 
         const formEntrada = document.getElementById('formEntrada');
         formEntrada.addEventListener('submit', function (event) {
@@ -142,6 +188,11 @@
                 Swal.fire('Formulario Incompleto', 'Debe registrar la OC, Insumo, Cantidad, Lote y Caducidad.', 'warning');
             } else {
                 event.preventDefault(); // Interceptamos para efecto visual UX
+                const errorMsg = document.getElementById('errorMsg');
+                if (errorMsg) {
+                    Swal.fire('Error', errorMsg.value, 'error');
+                }
+
                 const btn = document.getElementById('btnRegistrar');
                 btn.disabled = true;
                 

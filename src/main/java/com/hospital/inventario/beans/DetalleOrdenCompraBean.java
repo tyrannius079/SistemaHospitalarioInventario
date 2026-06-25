@@ -7,6 +7,10 @@ public class DetalleOrdenCompraBean {
     private int cantidad;
     private double precioUnitario;
     private double subtotal;
+    
+    // Campos transitorios para UI
+    private String nombreInsumo;
+    private String codigoInsumo;
 
     public DetalleOrdenCompraBean() {
     }
@@ -67,5 +71,21 @@ public class DetalleOrdenCompraBean {
 
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public String getNombreInsumo() {
+        return nombreInsumo;
+    }
+
+    public void setNombreInsumo(String nombreInsumo) {
+        this.nombreInsumo = nombreInsumo;
+    }
+
+    public String getCodigoInsumo() {
+        return codigoInsumo;
+    }
+
+    public void setCodigoInsumo(String codigoInsumo) {
+        this.codigoInsumo = codigoInsumo;
     }
 }

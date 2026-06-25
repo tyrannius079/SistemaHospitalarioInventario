@@ -62,7 +62,6 @@
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="m-0 fw-bold text-primary d-inline-block"><i class="fas fa-list-ol me-2"></i>Detalle de Cotización</h6>
-                    <span class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem;"><i class="fas fa-tools me-1"></i>En construcción: Los detalles aún no se guardan</span>
                 </div>
                 <button type="button" class="btn btn-sm btn-success shadow-sm" id="btnAgregarFila">
                     <i class="fas fa-plus me-1"></i> Agregar Insumo

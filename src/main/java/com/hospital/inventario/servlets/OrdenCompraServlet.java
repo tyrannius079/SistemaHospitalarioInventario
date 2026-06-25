@@ -33,7 +33,14 @@ public class OrdenCompraServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if ("listar".equals(action)) {
+        if ("detalles_json".equals(action)) {
+            int idOrdenCompra = parseInt(request.getParameter("idOrdenCompra"));
+            List<DetalleOrdenCompraBean> detalles = ordenCompraServices.getDetallesPorOrden(idOrdenCompra);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = new com.google.gson.Gson().toJson(detalles);
+            response.getWriter().write(json);
+        } else if ("listar".equals(action)) {
             request.setAttribute("ordenes", ordenCompraServices.getOrdenes());
             request.getRequestDispatcher("/ConsultarOrdenes.jsp").forward(request, response);
         } else {
