@@ -101,6 +101,7 @@
 
         <!-- Panel de Acciones -->
         <div class="d-flex justify-content-end mb-5 gap-2">
+            <input type="hidden" name="montoTotal" id="montoTotalHidden" value="0.00">
             <button type="button" class="btn btn-secondary px-4"><i class="fas fa-times me-1"></i> Cancelar</button>
             <button type="submit" class="btn btn-primary px-5 fw-bold" id="btnGuardar"><i class="fas fa-save me-1"></i> Registrar Proforma</button>
         </div>
@@ -217,5 +218,6 @@
         document.getElementById('lblSubtotal').textContent = subtotalNeto.toFixed(2);
         document.getElementById('lblIgv').textContent = igv.toFixed(2);
         document.getElementById('lblTotal').textContent = total.toFixed(2);
+        document.getElementById('montoTotalHidden').value = total.toFixed(2);
     }
 </script>

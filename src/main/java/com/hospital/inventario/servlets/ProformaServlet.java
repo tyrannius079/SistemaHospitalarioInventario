@@ -58,12 +58,20 @@ public class ProformaServlet extends HttpServlet {
             bean.setMontoTotal(montoTotal);
             bean.setTiempoEntregaDias(5); // valor por defecto
             bean.setIdEstado(1); // Estado inicial: PENDIENTE
-            proformaServices.registrarProforma(bean);
+            
+            if (proformaServices.registrarProforma(bean)) {
+                request.setAttribute("message", "La proforma del proveedor ha sido registrada correctamente.");
+                request.getRequestDispatcher("/confirmacion.jsp").forward(request, response);
+                return;
+            } else {
+                request.setAttribute("error", "Ocurrió un error al registrar la proforma.");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                return;
+            }
         } catch (NumberFormatException e) {
-            // Error de parseo, ignorar
+            request.setAttribute("error", "Datos de formulario inválidos.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            return;
         }
-
-        // Redirect-after-POST
-        response.sendRedirect(request.getContextPath() + "/proforma");
     }
 }
