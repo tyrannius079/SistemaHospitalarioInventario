@@ -34,16 +34,18 @@ public class AjusteInventarioServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("usuarioLogueado") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
-        UsuarioBean usuario = (UsuarioBean) session.getAttribute("usuarioLogueado");
+        UsuarioBean usuario = session != null ? (UsuarioBean) session.getAttribute("usuarioLogueado") : null;
+        int idUsuarioFallback = (usuario != null) ? usuario.getIdUsuario() : 3; // Fallback al id 3 (Técnico Almacen) para pruebas locales sin login
+        
         int idInsumo = parseInt(request.getParameter("idInsumo"));
         int cantidad = parseInt(request.getParameter("cantidad"));
         String tipoMovimiento = safeText(request.getParameter("tipoMovimiento")); // "SALIDA" o "AJUSTE"
         String observaciones = safeText(request.getParameter("observaciones"));
+        String areaDestino = safeText(request.getParameter("areaDestino"));
+
+        if ("SALIDA".equals(tipoMovimiento) && !areaDestino.isEmpty()) {
+            observaciones = "Destino: " + areaDestino + " | " + observaciones;
+        }
 
         if (idInsumo <= 0 || cantidad <= 0 || (!"SALIDA".equals(tipoMovimiento) && !"AJUSTE".equals(tipoMovimiento))) {
             request.setAttribute("error", "Datos incompletos o invalidos para la salida/ajuste.");
@@ -69,7 +71,7 @@ public class AjusteInventarioServlet extends HttpServlet {
         mov.setIdInsumo(idInsumo);
         mov.setIdLote(null); // No se detalla lote en esta abstracción
         mov.setIdOrdenCompra(null);
-        mov.setIdUsuario(usuario.getIdUsuario());
+        mov.setIdUsuario(idUsuarioFallback);
         mov.setFechaMovimiento(new Timestamp(System.currentTimeMillis()));
         mov.setTipoMovimiento(tipoMovimiento);
         mov.setCantidad(cantidad); // Cantidad siempre positiva

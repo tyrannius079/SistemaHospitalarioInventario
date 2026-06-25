@@ -26,4 +26,19 @@ public class UsuarioServices implements IUsuarioServices {
     public UsuarioBean validarLogin(String dni, String password) {
         return usuarioDAO.validarLogin(dni, password);
     }
+
+    @Override
+    public boolean crearUsuario(UsuarioBean bean, String rawPassword) {
+        return usuarioDAO.crearUsuario(bean, rawPassword);
+    }
+
+    @Override
+    public boolean editarUsuario(UsuarioBean bean) {
+        return usuarioDAO.editarUsuario(bean);
+    }
+
+    @Override
+    public boolean desactivarUsuario(String dni) {
+        return usuarioDAO.desactivarUsuario(dni);
+    }
 }

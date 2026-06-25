@@ -24,14 +24,70 @@ public class UsuarioDAO {
             while (rs.next()) {
                 UsuarioBean bean = new UsuarioBean();
                 bean.setIdUsuario(rs.getInt("idUsuario"));
+                bean.setDni(rs.getString("dni"));
                 bean.setNombre(rs.getString("nombres") + " " + rs.getString("apellidos"));
+                bean.setCorreo(rs.getString("email"));
                 bean.setRol(rs.getString("rol"));
+                bean.setEstado(rs.getString("estado").equals("A") ? "ACTIVO" : "INACTIVO");
                 lista.add(bean);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public boolean crearUsuario(UsuarioBean bean, String rawPassword) {
+        String sql = "INSERT INTO TB_Usuario (dni, nombres, apellidos, email, password, rol, estado) VALUES (?, ?, ?, ?, ?, ?, 'A')";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, bean.getDni());
+            
+            // Separar nombres y apellidos simple (idealmente vendrian separados, pero el UI los manda juntos)
+            String[] partes = bean.getNombre().split(" ", 2);
+            ps.setString(2, partes[0]);
+            ps.setString(3, partes.length > 1 ? partes[1] : "");
+            
+            ps.setString(4, bean.getCorreo());
+            ps.setString(5, rawPassword);
+            ps.setString(6, bean.getRol());
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean editarUsuario(UsuarioBean bean) {
+        String sql = "UPDATE TB_Usuario SET nombres = ?, apellidos = ?, email = ?, rol = ? WHERE dni = ?";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            String[] partes = bean.getNombre().split(" ", 2);
+            ps.setString(1, partes[0]);
+            ps.setString(2, partes.length > 1 ? partes[1] : "");
+            ps.setString(3, bean.getCorreo());
+            ps.setString(4, bean.getRol());
+            ps.setString(5, bean.getDni());
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean desactivarUsuario(String dni) {
+        String sql = "UPDATE TB_Usuario SET estado = 'I' WHERE dni = ?";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, dni);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public UsuarioBean validarLogin(String dni, String password) {

@@ -33,62 +33,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Datos Simulados / Fallback UI si la BD no envía info -->
-                        <tr>
-                            <td class="fw-bold text-secondary">71234567</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px;">
-                                        JP
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold text-dark">Juan Pérez (Tú)</div>
-                                        <small class="text-muted">jperez@hospital.gob.pe</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>jperez@hospital.gob.pe</td>
-                            <td><span class="badge bg-dark">ADMINISTRADOR</span></td>
-                            <td class="text-center">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle">Activo</span>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="abrirModalEditar('71234567', 'Juan Pérez', 'jperez@hospital.gob.pe', 'ADMINISTRADOR', 'ACTIVO')">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" title="Desactivar" disabled>
-                                    <i class="fas fa-user-slash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold text-secondary">40556677</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-secondary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px;">
-                                        MR
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold text-dark">María Ramos</div>
-                                        <small class="text-muted">mramos@hospital.gob.pe</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>mramos@hospital.gob.pe</td>
-                            <td><span class="badge bg-info text-dark">JEFE DE ALMACÉN</span></td>
-                            <td class="text-center">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle">Activo</span>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" title="Desactivar" onclick="confirmarDesactivacion()">
-                                    <i class="fas fa-user-slash"></i>
-                                </button>
-                            </td>
-                        </tr>
-
                         <!-- Iteración JSTL Original -->
                         <c:forEach var="usu" items="${usuarios}">
                             <tr>
@@ -121,7 +65,7 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <c:if test="${usu.estado == 'ACTIVO'}">
-                                        <button class="btn btn-sm btn-outline-danger" title="Desactivar" onclick="confirmarDesactivacion()">
+                                        <button class="btn btn-sm btn-outline-danger" title="Desactivar" onclick="confirmarDesactivacion('${usu.dni}')">
                                             <i class="fas fa-user-slash"></i>
                                         </button>
                                     </c:if>
@@ -253,7 +197,7 @@
         myModal.show();
     }
 
-    function confirmarDesactivacion() {
+    function confirmarDesactivacion(dni) {
         Swal.fire({
             title: '¿Revocar acceso?',
             text: "El usuario será desactivado y no podrá volver a iniciar sesión en el sistema.",
@@ -265,8 +209,25 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Aquí iría el submit o llamada AJAX real
-                Swal.fire('Desactivado', 'El usuario ha perdido acceso al sistema.', 'success');
+                // Crear form dinamico para mandar por POST
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = '${pageContext.request.contextPath}/usuario';
+                
+                const inputAction = document.createElement('input');
+                inputAction.type = 'hidden';
+                inputAction.name = 'action';
+                inputAction.value = 'desactivar';
+                
+                const inputDni = document.createElement('input');
+                inputDni.type = 'hidden';
+                inputDni.name = 'dni';
+                inputDni.value = dni;
+                
+                form.appendChild(inputAction);
+                form.appendChild(inputDni);
+                document.body.appendChild(form);
+                form.submit();
             }
         });
     }

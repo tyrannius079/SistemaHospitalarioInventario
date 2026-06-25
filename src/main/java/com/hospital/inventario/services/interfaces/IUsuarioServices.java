@@ -6,4 +6,7 @@ import java.util.List;
 public interface IUsuarioServices {
     List<UsuarioBean> getUsuarios();
     UsuarioBean validarLogin(String dni, String password);
+    boolean crearUsuario(UsuarioBean bean, String rawPassword);
+    boolean editarUsuario(UsuarioBean bean);
+    boolean desactivarUsuario(String dni);
 }

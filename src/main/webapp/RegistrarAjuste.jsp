@@ -148,20 +148,19 @@
                     if (result.isConfirmed) {
                         const btn = document.getElementById('btnProcesar');
                         btn.disabled = true;
-                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando...';
                         
-                        // Fake AJAX para UX
-                        setTimeout(() => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Operación Registrada',
-                                text: 'El inventario ha sido actualizado correctamente.',
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                window.location.href = '${pageContext.request.contextPath}/ConsultarStock.jsp';
-                            });
-                        }, 1200);
+                        // Alert de carga y luego submit real
+                        Swal.fire({
+                            title: 'Procesando...',
+                            text: 'Actualizando Kardex',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                                setTimeout(() => {
+                                    formSalida.submit();
+                                }, 800);
+                            }
+                        });
                     }
                 });
             }

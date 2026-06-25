@@ -144,21 +144,21 @@
                 Swal.fire('Formulario Incompleto', 'Debe registrar la OC, Insumo, Cantidad, Lote y Caducidad.', 'warning');
             } else {
                 event.preventDefault(); // Interceptamos para efecto visual UX
-                
                 const btn = document.getElementById('btnRegistrar');
                 btn.disabled = true;
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando Entrada...';
                 
-                setTimeout(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Ingreso Exitoso',
-                        text: 'El insumo ha sido ingresado y el stock actualizado.',
-                        confirmButtonText: 'Ver Historial'
-                    }).then(() => {
-                        window.location.href = '${pageContext.request.contextPath}/ConsultarEntradas.jsp';
-                    });
-                }, 1200);
+                // Alert de carga y luego submit real
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Registrando la entrada en almacén',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        setTimeout(() => {
+                            formEntrada.submit();
+                        }, 800);
+                    }
+                });
             }
         }, false);
     });

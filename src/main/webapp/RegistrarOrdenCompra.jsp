@@ -101,8 +101,70 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Columna Derecha: Auditoría y Confirmación -->
+            
+            <!-- Columna Completa: Detalle de la Orden -->
+            <div class="col-lg-12 mt-2">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 fw-bold text-primary"><i class="fas fa-boxes me-2"></i>Detalle de Insumos</h6>
+                    </div>
+                    <div class="card-body bg-light border-bottom">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold">Seleccionar Insumo</label>
+                                <select class="form-select" id="selectInsumoTMP">
+                                    <option value="" selected disabled>Seleccione insumo...</option>
+                                    <c:forEach var="ins" items="${insumos}">
+                                        <option value="${ins.idInsumo}" data-nombre="${ins.nombre}" data-precio="${ins.precioUnitario}">
+                                            ${ins.nombre} (Stock: ${ins.stockActual})
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small fw-bold">Precio Unit. (S/)</label>
+                                <input type="number" step="0.01" class="form-control" id="precioTMP" placeholder="0.00">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small fw-bold">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidadTMP" placeholder="0" min="1">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-primary w-100 fw-bold" id="btnAgregarFila">
+                                    <i class="fas fa-plus me-1"></i> Agregar a la Lista
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0" id="tablaDetalles">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Insumo</th>
+                                        <th class="text-end">Precio Unit.</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-end">Subtotal</th>
+                                        <th class="text-center">Quitar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="filaVacia">
+                                        <td colspan="5" class="text-center text-muted py-4">No hay insumos agregados a esta orden.</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="table-light fw-bold">
+                                    <tr>
+                                        <td colspan="3" class="text-end">Monto Total Estimado:</td>
+                                        <td class="text-end text-primary fs-5">S/ <span id="lblTotalCalculado">0.00</span></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-4">
                 <div class="card shadow-sm border-0 mb-4 bg-light">
                     <div class="card-body">
@@ -183,6 +245,80 @@
         }
         // --- FIN PUNTO 1 ---
 
+        // --- PUNTO 2: Manejo de la Tabla Dinámica de Detalles ---
+        const btnAgregar = document.getElementById('btnAgregarFila');
+        const selectInsumoTMP = document.getElementById('selectInsumoTMP');
+        const precioTMP = document.getElementById('precioTMP');
+        const cantidadTMP = document.getElementById('cantidadTMP');
+        const tbodyDetalles = document.querySelector('#tablaDetalles tbody');
+        const lblTotal = document.getElementById('lblTotalCalculado');
+        const filaVacia = document.getElementById('filaVacia');
+        
+        let totalGeneral = 0;
+
+        // Auto-llenar precio sugerido al seleccionar insumo
+        selectInsumoTMP.addEventListener('change', function() {
+            const opt = this.options[this.selectedIndex];
+            if(opt && opt.value) {
+                precioTMP.value = opt.getAttribute('data-precio');
+            }
+        });
+
+        btnAgregar.addEventListener('click', function() {
+            const idInsumo = selectInsumoTMP.value;
+            const nombreInsumo = selectInsumoTMP.options[selectInsumoTMP.selectedIndex]?.text;
+            const precio = parseFloat(precioTMP.value);
+            const cantidad = parseInt(cantidadTMP.value);
+
+            if (!idInsumo || isNaN(precio) || isNaN(cantidad) || precio <= 0 || cantidad <= 0) {
+                Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'Complete todos los datos del insumo correctamente.', showConfirmButton: false, timer: 3000 });
+                return;
+            }
+
+            const subtotal = precio * cantidad;
+            totalGeneral += subtotal;
+            lblTotal.innerText = totalGeneral.toFixed(2);
+
+            if(filaVacia) filaVacia.style.display = 'none';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <input type="hidden" name="idInsumo" value="`+idInsumo+`">
+                    `+nombreInsumo+`
+                </td>
+                <td class="text-end">
+                    <input type="hidden" name="precioUnitario" value="`+precio+`">
+                    S/ `+precio.toFixed(2)+`
+                </td>
+                <td class="text-center">
+                    <input type="hidden" name="cantidad" value="`+cantidad+`">
+                    `+cantidad+`
+                </td>
+                <td class="text-end fw-bold">S/ `+subtotal.toFixed(2)+`</td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-danger btn-quitar"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbodyDetalles.appendChild(tr);
+
+            // Limpiar form temporal
+            selectInsumoTMP.value = "";
+            precioTMP.value = "";
+            cantidadTMP.value = "";
+
+            // Evento para quitar
+            tr.querySelector('.btn-quitar').addEventListener('click', function() {
+                totalGeneral -= subtotal;
+                lblTotal.innerText = totalGeneral.toFixed(2);
+                tr.remove();
+                if(tbodyDetalles.querySelectorAll('tr').length === 1) { // Solo queda la fila oculta
+                    if(filaVacia) filaVacia.style.display = 'table-row';
+                }
+            });
+        });
+        // --- FIN PUNTO 2 ---
+
         // Validación
         const formOC = document.getElementById('formOrdenCompra');
         formOC.addEventListener('submit', function (event) {
@@ -196,21 +332,22 @@
                     text: 'Complete todos los campos obligatorios (*)'
                 });
             } else {
-                event.preventDefault(); // Simulación para UX
+                event.preventDefault(); // Interceptamos para efecto visual UX
                 const btn = document.getElementById('btnEmitir');
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Emitiendo...';
                 
-                setTimeout(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Orden Emitida',
-                        text: 'La Orden de Compra OC-2026-0015 ha sido generada correctamente.',
-                        confirmButtonText: 'Ver Órdenes'
-                    }).then(() => {
-                        window.location.href = '${pageContext.request.contextPath}/ConsultarOrdenes.jsp';
-                    });
-                }, 1500);
+                // Alert de carga y luego submit real
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Emitiendo Orden de Compra',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        setTimeout(() => {
+                            formOC.submit();
+                        }, 800);
+                    }
+                });
             }
         }, false);
     });
