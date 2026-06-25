@@ -95,6 +95,13 @@ INSERT INTO TB_Proforma (idProveedor, fechaEmision, montoTotal, tiempoEntregaDia
 (4, CURDATE(), 2100.00, 3, 1),
 (5, CURDATE(), 4200.50, 4, 1);
 
+-- 8.5 DETALLE PROFORMA
+INSERT INTO TB_DetalleProforma (idProforma, idInsumo, cantidad, precioUnitario, subtotal) VALUES
+(4, 1, 100, 15.00, 1500.00),
+(4, 3, 50, 12.00, 600.00),
+(5, 4, 200, 21.00, 4200.00),
+(5, 5, 1, 0.50, 0.50);
+
 -- 9. ÓRDENES DE COMPRA 
 INSERT INTO TB_OrdenCompra (idSolicitud, idProforma, idProveedor, idUsuario, idPresupuesto, fechaEmision, total, idEstado, observaciones) VALUES
 (1, 1, 1, 1, 1, DATE_SUB(CURDATE(), INTERVAL 12 DAY), 12500.00, 5, 'OC-2026-0014 (Ref)'),

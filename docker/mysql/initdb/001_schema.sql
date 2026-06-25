@@ -93,6 +93,17 @@ CREATE TABLE IF NOT EXISTS TB_Proforma (
   CONSTRAINT fk_proforma_estado FOREIGN KEY (idEstado) REFERENCES TB_Estado(idEstado)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS TB_DetalleProforma (
+  idDetalle INT AUTO_INCREMENT PRIMARY KEY,
+  idProforma INT NOT NULL,
+  idInsumo INT NOT NULL,
+  cantidad INT NOT NULL,
+  precioUnitario DECIMAL(12,2) NOT NULL,
+  subtotal DECIMAL(12,2) NOT NULL,
+  CONSTRAINT fk_detalleproforma_proforma FOREIGN KEY (idProforma) REFERENCES TB_Proforma(idProforma),
+  CONSTRAINT fk_detalleproforma_insumo FOREIGN KEY (idInsumo) REFERENCES TB_Insumo(idInsumo)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS TB_Presupuesto (
   idPresupuesto INT AUTO_INCREMENT PRIMARY KEY,
   periodo VARCHAR(10) NOT NULL,

@@ -237,6 +237,74 @@
             }
         });
 
+        // --- PUNTO 1.5: Cargar detalles de proforma dinámicamente ---
+        selectProforma.addEventListener('change', function() {
+            const idProf = this.value;
+            if(!idProf) return;
+            
+            // Limpiar la tabla de detalles actuales
+            tbodyDetalles.innerHTML = '';
+            totalGeneral = 0;
+            lblTotal.innerText = '0.00';
+            
+            // Bloquear los inputs de agregación manual si se seleccionó proforma
+            selectInsumoTMP.disabled = true;
+            precioTMP.disabled = true;
+            cantidadTMP.disabled = true;
+            btnAgregar.disabled = true;
+            
+            // Llamada AJAX
+            fetch('${pageContext.request.contextPath}/proforma?action=detalles_json&idProforma=' + idProf)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        data.forEach(det => {
+                            const subtotal = det.precioUnitario * det.cantidad;
+                            totalGeneral += subtotal;
+                            
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>
+                                    <input type="hidden" name="idInsumo" value="`+det.idInsumo+`">
+                                    <span class="badge bg-secondary me-2">`+det.codigoInsumo+`</span>`+det.nombreInsumo+`
+                                </td>
+                                <td class="text-end">
+                                    <input type="hidden" name="precioUnitario" value="`+det.precioUnitario+`">
+                                    S/ `+det.precioUnitario.toFixed(2)+`
+                                </td>
+                                <td class="text-center">
+                                    <input type="hidden" name="cantidad" value="`+det.cantidad+`">
+                                    `+det.cantidad+`
+                                </td>
+                                <td class="text-end fw-bold">S/ `+subtotal.toFixed(2)+`</td>
+                                <td class="text-center">
+                                    <span class="badge bg-success rounded-pill"><i class="fas fa-lock"></i> Desde Proforma</span>
+                                </td>
+                            `;
+                            tbodyDetalles.appendChild(tr);
+                        });
+                        lblTotal.innerText = totalGeneral.toFixed(2);
+                        if(filaVacia) filaVacia.style.display = 'none';
+                        
+                        Swal.fire({
+                            toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
+                            icon: 'success', title: 'Insumos cargados desde la proforma automáticamente.'
+                        });
+                    } else {
+                        // Habilitar manual en caso de que la proforma no tenga detalles (por retrocompatibilidad)
+                        selectInsumoTMP.disabled = false;
+                        precioTMP.disabled = false;
+                        cantidadTMP.disabled = false;
+                        btnAgregar.disabled = false;
+                        if(filaVacia) filaVacia.style.display = 'table-row';
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching proforma details", err);
+                    Swal.fire('Error', 'No se pudieron cargar los detalles de la proforma.', 'error');
+                });
+        });
+
         // Si la página se recarga y ya había un proveedor seleccionado, disparar el filtro automáticamente
         if(selectProveedor.value) {
             selectProveedor.dispatchEvent(new Event('change'));

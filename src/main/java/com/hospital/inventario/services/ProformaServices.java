@@ -1,6 +1,7 @@
 package com.hospital.inventario.services;
 
 import com.hospital.inventario.beans.ProformaBean;
+import com.hospital.inventario.beans.DetalleProformaBean;
 import com.hospital.inventario.dao.ProformaDAO;
 import com.hospital.inventario.services.interfaces.IProformaServices;
 
@@ -30,5 +31,10 @@ public class ProformaServices implements IProformaServices {
     @Override
     public List<ProformaBean> compararProformas(int idSolicitud) {
         return proformaDAO.compararProformas(idSolicitud);
+    }
+
+    @Override
+    public List<DetalleProformaBean> obtenerDetallesPorProforma(int idProforma) {
+        return proformaDAO.obtenerDetallesPorProforma(idProforma);
     }
 }

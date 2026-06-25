@@ -1,6 +1,8 @@
 package com.hospital.inventario.beans;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProformaBean {
     private int idProforma;
@@ -11,6 +13,8 @@ public class ProformaBean {
     private int idEstado;
     private String nombreEstado;
     private String razonSocialProveedor;
+    
+    private List<DetalleProformaBean> detalles = new ArrayList<>();
 
     public ProformaBean() {
     }
@@ -87,6 +91,14 @@ public class ProformaBean {
 
     public void setRazonSocialProveedor(String razonSocialProveedor) {
         this.razonSocialProveedor = razonSocialProveedor;
+    }
+
+    public List<DetalleProformaBean> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleProformaBean> detalles) {
+        this.detalles = detalles;
     }
 
     public String getCodigoFormateado() {
