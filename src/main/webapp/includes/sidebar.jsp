@@ -172,7 +172,7 @@
                     <span><i class="fas fa-shield-alt main-icon me-2"></i> Seguridad</span>
                 </a>
                 <ul class="collapse list-unstyled" id="submenuSeguridad">
-                    <li><a href="${pageContext.request.contextPath}/usuarios.jsp"><i class="fas fa-users-cog me-2"></i> Gestionar Usuarios</a></li>
+                    <li><a href="${pageContext.request.contextPath}/usuario"><i class="fas fa-users-cog me-2"></i> Gestionar Usuarios</a></li>
                 </ul>
             </li>
         </c:if>
