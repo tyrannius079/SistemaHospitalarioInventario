@@ -19,9 +19,14 @@ public class ProformaDAO {
 
     public List<ProformaBean> getProformas() {
         List<ProformaBean> lista = new ArrayList<>();
-        String sql = "SELECT p.*, e.nombre AS nombreEstado, prov.razonSocial FROM TB_Proforma p "
+        String sql = "SELECT p.*, e.nombre AS nombreEstado, prov.razonSocial, "
+                + "GROUP_CONCAT(i.nombre SEPARATOR ', ') AS resumenInsumos "
+                + "FROM TB_Proforma p "
                 + "JOIN TB_Estado e ON p.idEstado = e.idEstado "
                 + "JOIN TB_Proveedor prov ON p.idProveedor = prov.idProveedor "
+                + "LEFT JOIN TB_DetalleProforma dp ON p.idProforma = dp.idProforma "
+                + "LEFT JOIN TB_Insumo i ON dp.idInsumo = i.idInsumo "
+                + "GROUP BY p.idProforma "
                 + "ORDER BY p.idProforma DESC";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -36,6 +41,7 @@ public class ProformaDAO {
                 bean.setIdEstado(rs.getInt("idEstado"));
                 bean.setNombreEstado(rs.getString("nombreEstado"));
                 bean.setRazonSocialProveedor(rs.getString("razonSocial"));
+                bean.setResumenInsumos(rs.getString("resumenInsumos") != null ? rs.getString("resumenInsumos") : "Sin Insumos");
                 lista.add(bean);
             }
         } catch (SQLException e) {

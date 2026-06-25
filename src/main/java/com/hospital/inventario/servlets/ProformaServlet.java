@@ -105,6 +105,12 @@ public class ProformaServlet extends HttpServlet {
             }
             bean.setDetalles(detalles);
             
+            if (detalles.isEmpty()) {
+                request.setAttribute("error", "La proforma debe contener al menos un insumo en su detalle.");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                return;
+            }
+            
             if (proformaServices.registrarProforma(bean)) {
                 request.setAttribute("message", "La proforma del proveedor ha sido registrada correctamente.");
                 request.getRequestDispatcher("/confirmacion.jsp").forward(request, response);

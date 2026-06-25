@@ -13,6 +13,7 @@ public class ProformaBean {
     private int idEstado;
     private String nombreEstado;
     private String razonSocialProveedor;
+    private String resumenInsumos;
     
     private List<DetalleProformaBean> detalles = new ArrayList<>();
 
@@ -99,6 +100,14 @@ public class ProformaBean {
 
     public void setDetalles(List<DetalleProformaBean> detalles) {
         this.detalles = detalles;
+    }
+
+    public String getResumenInsumos() {
+        return resumenInsumos;
+    }
+
+    public void setResumenInsumos(String resumenInsumos) {
+        this.resumenInsumos = resumenInsumos;
     }
 
     public String getCodigoFormateado() {

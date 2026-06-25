@@ -62,15 +62,13 @@
 
                             <div class="col-md-6">
                                 <label for="idProforma" class="form-label">Proforma de Referencia *</label>
-                                <select class="form-select" id="idProforma" name="idProforma" required>
-                                    <option value="" selected disabled>Seleccione Proforma...</option>
-                                    <c:forEach var="prof" items="${proformas}">
-                                        <option value="${prof.idProforma}" data-proveedor="${prof.idProveedor}">#${prof.idProforma} - Total: S/ ${prof.montoTotal}</option>
-                                    </c:forEach>
-                                    <c:if test="${empty proformas}">
-                                        <option value="" disabled>No hay proformas vigentes</option>
-                                    </c:if>
-                                </select>
+                                <div class="input-group">
+                                    <input type="hidden" id="idProforma" name="idProforma" required>
+                                    <input type="text" class="form-control bg-white" id="txtProformaSeleccionada" placeholder="Ninguna proforma seleccionada..." readonly required>
+                                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalBuscadorProformas">
+                                        <i class="fas fa-search me-1"></i> Buscar
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="col-md-6">
@@ -197,7 +195,60 @@
     </form>
 </div>
 
-<jsp:include page="/includes/footer.jsp" />
+<!-- Modal Buscador de Proformas -->
+<div class="modal fade" id="modalBuscadorProformas" tabindex="-1" aria-labelledby="modalProformasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalProformasLabel"><i class="fas fa-search me-2"></i>Buscador de Proformas</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="table-responsive">
+                    <table id="tablaBuscadorProformas" class="table table-hover table-striped align-middle" style="width:100%">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Proveedor</th>
+                                <th>Fecha</th>
+                                <th>Monto Total</th>
+                                <th>Insumos Cotizados</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="prof" items="${proformas}">
+                                <tr>
+                                    <td><strong>#${prof.idProforma}</strong></td>
+                                    <td>${prof.razonSocialProveedor}</td>
+                                    <td>${prof.fechaEmision}</td>
+                                    <td class="fw-bold text-end">S/ ${prof.montoTotal}</td>
+                                    <td><small class="text-muted">${prof.resumenInsumos}</small></td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-success btn-seleccionar-proforma" 
+                                                data-bs-dismiss="modal"
+                                                data-id="${prof.idProforma}" 
+                                                data-proveedor="${prof.idProveedor}"
+                                                data-texto="#${prof.idProforma} - ${prof.razonSocialProveedor} (S/ ${prof.montoTotal})">
+                                            <i class="fas fa-check"></i> Seleccionar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables JS & jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -206,40 +257,51 @@
         const fechaActual = new Date().toISOString().split('T')[0];
         document.getElementById('fechaEmision').value = fechaActual;
 
-        // --- PUNTO 1: Filtrado Dinámico de Proformas por Proveedor ---
+        // Inicializar DataTable para el buscador de proformas
+        const tablaProformas = $('#tablaBuscadorProformas').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            pageLength: 5,
+            lengthMenu: [5, 10, 25]
+        });
+
         const selectProveedor = document.getElementById('idProveedor');
-        const selectProforma = document.getElementById('idProforma');
+        const idProformaInput = document.getElementById('idProforma');
+        const txtProformaSeleccionada = document.getElementById('txtProformaSeleccionada');
 
+        // Si se cambia el proveedor manualmente, podemos filtrar el modal por defecto
         selectProveedor.addEventListener('change', function() {
-            const idProv = this.value;
-            // Solo buscar options que tengan el atributo data-proveedor
-            const opcionesProforma = selectProforma.querySelectorAll('option[data-proveedor]');
-            
-            // Limpiar la selección actual
-            selectProforma.value = "";
-            
-            let tieneProformas = false;
-            opcionesProforma.forEach(opt => {
-                if (opt.getAttribute('data-proveedor') === idProv) {
-                    opt.style.display = 'block'; // Mostrar
-                    tieneProformas = true;
-                } else {
-                    opt.style.display = 'none';  // Ocultar
-                }
-            });
-
-            if(idProv !== "" && !tieneProformas && opcionesProforma.length > 0) {
-                // Alerta suave (Toast) indicando que este proveedor no nos ha cotizado nada
-                Swal.fire({
-                    toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
-                    icon: 'warning', title: 'Este proveedor no tiene proformas registradas.'
-                });
+            const proveedorTexto = this.options[this.selectedIndex].text;
+            if(proveedorTexto && proveedorTexto !== 'Seleccione Proveedor...') {
+                tablaProformas.search(proveedorTexto).draw();
+            } else {
+                tablaProformas.search('').draw();
             }
         });
 
-        // --- PUNTO 1.5: Cargar detalles de proforma dinámicamente ---
-        selectProforma.addEventListener('change', function() {
-            const idProf = this.value;
+        // Evento al seleccionar una proforma desde el modal
+        document.querySelectorAll('.btn-seleccionar-proforma').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idProf = this.getAttribute('data-id');
+                const idProv = this.getAttribute('data-proveedor');
+                const texto = this.getAttribute('data-texto');
+
+                // Llenar datos en el formulario
+                idProformaInput.value = idProf;
+                txtProformaSeleccionada.value = texto;
+                
+                // Auto-seleccionar proveedor
+                if(selectProveedor.value !== idProv) {
+                    selectProveedor.value = idProv;
+                }
+
+                cargarDetallesProforma(idProf);
+            });
+        });
+
+        // --- Cargar detalles de proforma dinámicamente ---
+        function cargarDetallesProforma(idProf) {
             if(!idProf) return;
             
             // Limpiar la tabla de detalles actuales
@@ -303,7 +365,7 @@
                     console.error("Error fetching proforma details", err);
                     Swal.fire('Error', 'No se pudieron cargar los detalles de la proforma.', 'error');
                 });
-        });
+        }
 
         // Si la página se recarga y ya había un proveedor seleccionado, disparar el filtro automáticamente
         if(selectProveedor.value) {
@@ -460,3 +522,5 @@
         }, false);
     });
 </script>
+
+<jsp:include page="/includes/footer.jsp" />
