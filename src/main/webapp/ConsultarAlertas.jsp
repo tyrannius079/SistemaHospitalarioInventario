@@ -49,7 +49,7 @@
                                         <td class="text-center fw-bold text-muted">${alerta.stockMinimo}</td>
                                         <td class="text-center fw-bold fs-5 text-danger">${alerta.stockActual}</td>
                                         <td class="text-center">
-                                            <a href="${pageContext.request.contextPath}/RegistrarOrdenCompra.jsp" class="btn btn-sm btn-danger">Comprar</a>
+                                            <a href="${pageContext.request.contextPath}/orden-compra" class="btn btn-sm btn-danger">Comprar</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -95,7 +95,7 @@
                                         </td>
                                         <td class="text-center fw-bold text-dark">${lote.cantidadActual} unds.</td>
                                         <td class="text-center">
-                                            <a href="${pageContext.request.contextPath}/RegistrarAjuste.jsp" class="btn btn-sm btn-outline-warning text-dark border-warning" title="Mermar stock caducado">Dar Baja</a>
+                                            <a href="${pageContext.request.contextPath}/ajuste-inventario" class="btn btn-sm btn-outline-warning text-dark border-warning" title="Mermar stock caducado">Dar Baja</a>
                                         </td>
                                     </tr>
                                 </c:forEach>

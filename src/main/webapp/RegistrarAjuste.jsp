@@ -12,7 +12,7 @@
         </div>
         <div>
             <!-- En la versión completa aquí iría un botón hacia Consultar Salidas -->
-            <a href="${pageContext.request.contextPath}/ConsultarStock.jsp" class="btn btn-outline-secondary shadow-sm">
+            <a href="${pageContext.request.contextPath}/inventario?action=stock" class="btn btn-outline-secondary shadow-sm">
                 <i class="fas fa-boxes me-1"></i> Ver Kardex General
             </a>
         </div>

@@ -11,7 +11,7 @@
             <p class="text-muted mb-0">Gestión maestra de medicamentos y material médico.</p>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/categorias.jsp" class="btn btn-outline-secondary me-2 shadow-sm">
+            <a href="${pageContext.request.contextPath}/categoria" class="btn btn-outline-secondary me-2 shadow-sm">
                 <i class="fas fa-tags me-1"></i> Categorías
             </a>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalInsumo" onclick="abrirModalNuevo()">

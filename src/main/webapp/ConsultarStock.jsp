@@ -11,10 +11,10 @@
             <p class="text-muted mb-0">Control en tiempo real del stock físico de almacén y alertas de desabastecimiento.</p>
         </div>
         <div class="d-flex gap-2">
-            <a href="${pageContext.request.contextPath}/RegistrarEntrada.jsp" class="btn btn-outline-success shadow-sm">
+            <a href="${pageContext.request.contextPath}/inventario" class="btn btn-outline-success shadow-sm">
                 <i class="fas fa-arrow-down me-1"></i> Nueva Entrada
             </a>
-            <a href="${pageContext.request.contextPath}/RegistrarAjuste.jsp" class="btn btn-outline-danger shadow-sm">
+            <a href="${pageContext.request.contextPath}/ajuste-inventario" class="btn btn-outline-danger shadow-sm">
                 <i class="fas fa-arrow-up me-1"></i> Registrar Salida
             </a>
             <button class="btn btn-secondary shadow-sm" onclick="imprimirReporte()">

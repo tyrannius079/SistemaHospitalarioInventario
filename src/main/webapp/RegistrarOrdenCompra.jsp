@@ -11,7 +11,7 @@
             <p class="text-muted mb-0">Formalización de la adquisición a proveedores adjudicados.</p>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/ConsultarOrdenes.jsp" class="btn btn-outline-secondary shadow-sm">
+            <a href="${pageContext.request.contextPath}/orden-compra?action=listar" class="btn btn-outline-secondary shadow-sm">
                 <i class="fas fa-list me-1"></i> Ver Órdenes
             </a>
         </div>

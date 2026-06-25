@@ -24,7 +24,7 @@
         <span>${requestScope.error}</span>
       </div>
       <div class="acciones">
-        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primario">Volver al menú</a>
+        <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primario">Volver al menú</a>
       </div>
     </div>
   </main>

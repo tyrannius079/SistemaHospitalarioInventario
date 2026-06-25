@@ -11,7 +11,7 @@
             <p class="text-muted mb-0">Ingreso de cotizaciones enviadas por los proveedores.</p>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/proformas.jsp" class="btn btn-outline-secondary shadow-sm">
+            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-outline-secondary shadow-sm">
                 <i class="fas fa-arrow-left me-1"></i> Volver a Proformas
             </a>
         </div>

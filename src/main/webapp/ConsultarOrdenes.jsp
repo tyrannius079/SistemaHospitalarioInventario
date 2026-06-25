@@ -11,7 +11,7 @@
             <p class="text-muted mb-0">Consulte el historial y estado de los requerimientos de abastecimiento.</p>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/RegistrarOrdenCompra.jsp" class="btn btn-primary shadow-sm">
+            <a href="${pageContext.request.contextPath}/orden-compra" class="btn btn-primary shadow-sm">
                 <i class="fas fa-plus-circle me-1"></i> Nueva Orden
             </a>
         </div>

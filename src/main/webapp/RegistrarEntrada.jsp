@@ -11,7 +11,7 @@
             <p class="text-muted mb-0">Registrar el ingreso físico de mercadería y actualizar el stock (Kardex).</p>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/ConsultarEntradas.jsp" class="btn btn-outline-secondary shadow-sm">
+            <a href="${pageContext.request.contextPath}/inventario?action=listar" class="btn btn-outline-secondary shadow-sm">
                 <i class="fas fa-history me-1"></i> Historial de Entradas
             </a>
         </div>
