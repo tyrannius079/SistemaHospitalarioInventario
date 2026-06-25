@@ -32,35 +32,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Datos estáticos de ejemplo (Simulación) -->
-                        <tr>
-                            <td><span class="badge bg-secondary">CAT-001</span></td>
-                            <td class="fw-bold">Medicamentos</td>
-                            <td>Fármacos y medicinas en general</td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('CAT-001', 'Medicamentos', 'Fármacos y medicinas en general')" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('CAT-001')" title="Desactivar">
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge bg-secondary">CAT-002</span></td>
-                            <td class="fw-bold">Material Médico</td>
-                            <td>Jeringas, gasas, guantes, etc.</td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('CAT-002', 'Material Médico', 'Jeringas, gasas, guantes, etc.')" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('CAT-002')" title="Desactivar">
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        <c:forEach var="cat" items="${categorias}">
+                            <tr>
+                                <td><span class="badge bg-secondary">${cat.codigo}</span></td>
+                                <td class="fw-bold">${cat.nombre}</td>
+                                <td>${cat.descripcion}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${cat.estado == 'ACTIVO'}">
+                                            <span class="badge bg-success">Activo</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('${cat.codigo}', '${cat.nombre}', '${cat.descripcion}')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('${cat.codigo}')" title="Desactivar">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>

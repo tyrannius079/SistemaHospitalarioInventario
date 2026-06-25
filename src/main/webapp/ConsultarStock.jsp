@@ -87,44 +87,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Datos estáticos para simulación visual -->
-                        <tr>
-                            <td class="fw-bold text-secondary">INS-0001</td>
-                            <td class="text-start">
-                                <div class="fw-bold">Paracetamol 500mg</div>
-                                <small class="text-muted">Medicamentos Generales</small>
-                            </td>
-                            <td>Caja x 100</td>
-                            <td class="text-center fw-bold text-muted">50</td>
-                            <td class="text-center fw-bold fs-5 text-success">120</td>
-                            <td class="text-center">
-                                <span class="badge bg-success-subtle text-success"><i class="fas fa-check-circle me-1"></i> ÓPTIMO</span>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" title="Ver Historial de Entradas/Salidas" onclick="verHistorial('INS-0001')">
-                                    <i class="fas fa-history"></i> Kardex
-                                </button>
-                            </td>
-                        </tr>
-                        <tr class="table-danger">
-                            <td class="fw-bold text-danger">INS-0002</td>
-                            <td class="text-start">
-                                <div class="fw-bold text-danger">Amoxicilina 250mg</div>
-                                <small class="text-danger">Antibióticos</small>
-                            </td>
-                            <td class="text-danger">Caja x 50</td>
-                            <td class="text-center fw-bold text-danger">20</td>
-                            <td class="text-center fw-bold fs-5 text-danger">5</td>
-                            <td class="text-center">
-                                <span class="badge bg-danger"><i class="fas fa-skull-crossbones me-1"></i> CRÍTICO</span>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-danger" title="Generar Proforma de Emergencia">
-                                    <i class="fas fa-shopping-cart"></i> Comprar
-                                </button>
-                            </td>
-                        </tr>
-
+                        <c:if test="${empty insumos}">
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">No hay registros disponibles en el inventario.</td>
+                            </tr>
+                        </c:if>
                         <!-- Bloque Dinámico JSTL Original Integrado -->
                         <c:forEach var="insumo" items="${insumos}">
                             <tr class="${insumo.stockActual <= insumo.stockMinimo ? 'table-danger' : ''}">

@@ -66,24 +66,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Fallback Visual para demo -->
                                 <c:if test="${empty presupuestos}">
                                     <tr>
-                                        <td class="fw-bold text-secondary">1</td>
-                                        <td><span class="badge bg-primary">2026-1</span></td>
-                                        <td class="text-end fw-bold">S/ 500,000.00</td>
-                                        <td class="text-end fw-bold text-success">S/ 150,000.00</td>
-                                        <td class="text-center align-middle">
-                                            <div class="progress" style="height: 20px;">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">70% consumido</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold text-secondary">2</td>
-                                        <td><span class="badge bg-primary">2026-2</span></td>
-                                        <td class="text-end fw-bold">S/ 800,000.00</td>
-                                        <td class="text-end fw-bold text-success">S/ 780,000.00</td>
                                         <td class="text-center align-middle">
                                             <div class="progress" style="height: 20px;">
                                                 <div class="progress-bar bg-success" role="progressbar" style="width: 2.5%;" aria-valuenow="2.5" aria-valuemin="0" aria-valuemax="100"></div>

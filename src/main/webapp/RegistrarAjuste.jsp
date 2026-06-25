@@ -64,8 +64,7 @@
                                         </c:if>
                                     </c:forEach>
                                     <c:if test="${empty insumos}">
-                                        <option value="1" data-stock="120">INS-0001 - Paracetamol 500mg (Disp: 120)</option>
-                                        <option value="2" data-stock="50">INS-0002 - Amoxicilina 250mg (Disp: 50)</option>
+                                        <option value="" disabled>No hay insumos</option>
                                     </c:if>
                                 </select>
                                 <div class="invalid-feedback">Seleccione un insumo con stock positivo.</div>

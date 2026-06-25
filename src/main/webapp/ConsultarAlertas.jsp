@@ -53,19 +53,10 @@
                                         </td>
                                     </tr>
                                 </c:forEach>
-                                <!-- Fallback visual si JSTL está vacío -->
                                 <c:if test="${empty alertasStock}">
-                                    <tr>
-                                        <td>
-                                            <div class="fw-bold text-danger">Amoxicilina 250mg</div>
-                                            <small class="text-muted">INS-0002</small>
-                                        </td>
-                                        <td class="text-center fw-bold text-muted">20</td>
-                                        <td class="text-center fw-bold fs-5 text-danger">5</td>
-                                        <td class="text-center">
-                                            <a href="${pageContext.request.contextPath}/RegistrarOrdenCompra.jsp" class="btn btn-sm btn-danger" title="Generar OC">Comprar</a>
-                                        </td>
-                                    </tr>
+                                    <div class="alert alert-light text-center text-muted" role="alert">
+                                        No hay alertas de stock por el momento.
+                                    </div>
                                 </c:if>
                             </tbody>
                         </table>
@@ -108,21 +99,10 @@
                                         </td>
                                     </tr>
                                 </c:forEach>
-                                <!-- Fallback visual si JSTL está vacío -->
                                 <c:if test="${empty alertasVencimiento}">
-                                    <tr>
-                                        <td>
-                                            <div class="fw-bold text-warning-emphasis">L-998822</div>
-                                            <small class="text-muted">Ref: INS-0005 (Suero)</small>
-                                        </td>
-                                        <td>
-                                            <span class="text-danger fw-bold"><i class="fas fa-calendar-times me-1"></i>30/06/2026</span>
-                                        </td>
-                                        <td class="text-center fw-bold text-dark">45 unds.</td>
-                                        <td class="text-center">
-                                            <a href="${pageContext.request.contextPath}/RegistrarAjuste.jsp" class="btn btn-sm btn-outline-warning text-dark border-warning" title="Despachar primero o Mermar">Dar Baja</a>
-                                        </td>
-                                    </tr>
+                                    <div class="alert alert-light text-center text-muted" role="alert">
+                                        No hay alertas de vencimiento por el momento.
+                                    </div>
                                 </c:if>
                             </tbody>
                         </table>

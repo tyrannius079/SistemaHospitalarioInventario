@@ -53,10 +53,8 @@
                                             ${prov.razonSocial} (${prov.ruc})
                                         </option>
                                     </c:forEach>
-                                    <!-- Fallback visual si la variable JSTL está vacía -->
                                     <c:if test="${empty proveedores}">
-                                        <option value="1" ${param.provId == '1' ? 'selected' : ''}>Distribuidora Médica S.A.C.</option>
-                                        <option value="2" ${param.provId == '2' ? 'selected' : ''}>Insumos Hospitalarios Perú</option>
+                                        <option value="" disabled>No hay proveedores registrados</option>
                                     </c:if>
                                 </select>
                                 <div class="invalid-feedback">Obligatorio.</div>
@@ -70,7 +68,7 @@
                                         <option value="${prof.idProforma}" data-proveedor="${prof.idProveedor}">#${prof.idProforma} - Total: S/ ${prof.montoTotal}</option>
                                     </c:forEach>
                                     <c:if test="${empty proformas}">
-                                        <option value="1">PROF-001 - Total: S/ 58.50</option>
+                                        <option value="" disabled>No hay proformas vigentes</option>
                                     </c:if>
                                 </select>
                             </div>
@@ -83,7 +81,7 @@
                                         <option value="${pres.idPresupuesto}">${pres.periodo} - Disp: S/ ${pres.montoDisponible}</option>
                                     </c:forEach>
                                     <c:if test="${empty presupuestos}">
-                                        <option value="1">2026-Q1 (Fármacos) - Disp: S/ 15,000.00</option>
+                                        <option value="" disabled>No hay presupuestos activos</option>
                                     </c:if>
                                 </select>
                             </div>

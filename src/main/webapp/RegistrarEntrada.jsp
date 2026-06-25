@@ -42,8 +42,7 @@
                                                 <option value="${ord.idOrdenCompra}">#OC-${ord.idOrdenCompra} - Total: S/ ${ord.total} - Proveedor: ${ord.idProveedor}</option>
                                             </c:forEach>
                                             <c:if test="${empty ordenes}">
-                                                <option value="15">#OC-2026-0015 - Distribuidora Médica S.A.C.</option>
-                                                <option value="14">#OC-2026-0014 - Insumos Hospitalarios Perú</option>
+                                                <option value="" disabled>No hay órdenes pendientes</option>
                                             </c:if>
                                         </select>
                                         <div class="invalid-feedback">Debe asociar la entrada a una Orden de Compra.</div>
@@ -72,8 +71,7 @@
                                                 <option value="${ins.idInsumo}">${ins.nombre} (Stock actual: ${ins.stockActual})</option>
                                             </c:forEach>
                                             <c:if test="${empty insumos}">
-                                                <option value="1">INS-0001 - Paracetamol 500mg (Caja x 100)</option>
-                                                <option value="2">INS-0002 - Amoxicilina 250mg (Caja x 50)</option>
+                                                <option value="" disabled>No hay insumos</option>
                                             </c:if>
                                         </select>
                                     </div>
