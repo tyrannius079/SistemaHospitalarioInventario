@@ -38,8 +38,21 @@ public class OrdenCompraServlet extends HttpServlet {
             List<DetalleOrdenCompraBean> detalles = ordenCompraServices.getDetallesPorOrden(idOrdenCompra);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            String json = new com.google.gson.Gson().toJson(detalles);
-            response.getWriter().write(json);
+            try (java.io.PrintWriter out = response.getWriter()) {
+                if (detalles != null && !detalles.isEmpty()) {
+                    StringBuilder json = new StringBuilder("[");
+                    for (int i = 0; i < detalles.size(); i++) {
+                        DetalleOrdenCompraBean det = detalles.get(i);
+                        json.append(String.format("{\"idInsumo\":%d, \"nombreInsumo\":\"%s\", \"codigoInsumo\":\"%s\", \"cantidad\":%d, \"precioUnitario\":%.2f}",
+                                det.getIdInsumo(), det.getNombreInsumo(), det.getCodigoInsumo(), det.getCantidad(), det.getPrecioUnitario()));
+                        if (i < detalles.size() - 1) json.append(",");
+                    }
+                    json.append("]");
+                    out.print(json.toString());
+                } else {
+                    out.print("[]");
+                }
+            }
         } else if ("listar".equals(action)) {
             request.setAttribute("ordenes", ordenCompraServices.getOrdenes());
             request.getRequestDispatcher("/ConsultarOrdenes.jsp").forward(request, response);

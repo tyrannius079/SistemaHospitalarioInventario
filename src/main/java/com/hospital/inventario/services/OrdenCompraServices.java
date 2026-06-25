@@ -105,15 +105,9 @@ public class OrdenCompraServices implements IOrdenCompraServices {
             return false;
         }
     }
-
     @Override
     public boolean modificarOrden(OrdenCompraBean bean) {
         return ordenCompraDAO.modificarOrden(bean);
-    }
-
-    @Override
-    public boolean actualizarEstadoOrden(int idOrdenCompra, int idEstado) {
-        return ordenCompraDAO.actualizarEstadoOrden(idOrdenCompra, idEstado);
     }
 
     @Override

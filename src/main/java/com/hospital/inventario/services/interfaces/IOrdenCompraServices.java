@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface IOrdenCompraServices {
     List<OrdenCompraBean> getOrdenes();
-    boolean registrarOrdenCompra(OrdenCompraBean bean, List<DetalleOrdenCompraBean> detalles);
-    boolean actualizarEstadoOrden(int idOrdenCompra, int idEstado);
+    boolean registrarOrden(OrdenCompraBean bean);
+    boolean modificarOrden(OrdenCompraBean bean);
     List<DetalleOrdenCompraBean> getDetallesPorOrden(int idOrdenCompra);
     OrdenCompraBean consultarOrden(int idOrdenCompra);
 }
