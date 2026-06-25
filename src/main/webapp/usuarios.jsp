@@ -49,7 +49,7 @@
                                     </div>
                                 </td>
                                 <td>${usu.correo}</td>
-                                <td><span class="badge bg-secondary">${usu.rol}</span></td>
+                                <td><span class="badge bg-secondary">${usu.nombreRol}</span></td>
                                 <td class="text-center">
                                     <c:choose>
                                         <c:when test="${usu.estado == 'ACTIVO'}">
@@ -61,7 +61,7 @@
                                     </c:choose>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="abrirModalEditar('${usu.dni}', '${usu.nombre}', '${usu.correo}', '${usu.rol}', '${usu.estado}')">
+                                    <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="abrirModalEditar('${usu.dni}', '${usu.nombre}', '${usu.correo}', '${usu.idRol}', '${usu.estado}')">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <c:if test="${usu.estado == 'ACTIVO'}">
@@ -116,9 +116,9 @@
                         <label for="rol" class="form-label fw-bold">Rol del Sistema *</label>
                         <select class="form-select" name="rol" id="rol" required>
                             <option value="" disabled selected>Seleccione el nivel de acceso...</option>
-                            <option value="ADMINISTRADOR">Administrador de Sistema (Full Access)</option>
-                            <option value="JEFE DE COMPRAS">Jefatura de Compras (Gestión Financiera)</option>
-                            <option value="ALMACEN">Técnico de Almacén (Operativo)</option>
+                            <option value="1">Administrador de Sistema (Full Access)</option>
+                            <option value="2">Jefe de Almacén (Gestión Financiera)</option>
+                            <option value="3">Técnico de Almacén (Operativo)</option>
                         </select>
                         <div class="invalid-feedback">Debe asignar un rol al usuario.</div>
                     </div>

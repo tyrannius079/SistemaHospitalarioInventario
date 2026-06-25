@@ -30,7 +30,8 @@ class OrdenCompraBeanTest {
         bean.setIdPresupuesto(15);
         bean.setFechaEmision(fecha);
         bean.setTotal(99.9);
-        bean.setEstado(STATE_TEXT);
+        bean.setIdEstado(1);
+        bean.setNombreEstado(STATE_TEXT);
         bean.setObservaciones(OBS_TEXT);
         bean.setDetalles(Collections.singletonList(detalle));
 
@@ -42,7 +43,8 @@ class OrdenCompraBeanTest {
         assertEquals(15, bean.getIdPresupuesto());
         assertEquals(fecha, bean.getFechaEmision());
         assertEquals(99.9, bean.getTotal());
-        assertEquals(STATE_TEXT, bean.getEstado());
+        assertEquals(1, bean.getIdEstado());
+        assertEquals(STATE_TEXT, bean.getNombreEstado());
         assertEquals(OBS_TEXT, bean.getObservaciones());
         assertEquals(1, bean.getDetalles().size());
         assertEquals(1, bean.getDetalles().get(0).getIdDetalle());
@@ -52,7 +54,9 @@ class OrdenCompraBeanTest {
     void constructorAssignsFields() {
         Date fecha = Date.valueOf(DATE_TEXT_2);
 
-        OrdenCompraBean bean = new OrdenCompraBean(1, 2, 3, 4, 5, 6, fecha, 77.7, STATE_TEXT_2, OBS_TEXT_2);
+        OrdenCompraBean bean = new OrdenCompraBean(1, 2, 3, 4, 5, 6, fecha, 77.7, OBS_TEXT_2);
+        bean.setIdEstado(2);
+        bean.setNombreEstado(STATE_TEXT_2);
 
         assertEquals(1, bean.getIdOrdenCompra());
         assertEquals(2, bean.getIdSolicitud());
@@ -62,7 +66,8 @@ class OrdenCompraBeanTest {
         assertEquals(6, bean.getIdPresupuesto());
         assertEquals(fecha, bean.getFechaEmision());
         assertEquals(77.7, bean.getTotal());
-        assertEquals(STATE_TEXT_2, bean.getEstado());
+        assertEquals(2, bean.getIdEstado());
+        assertEquals(STATE_TEXT_2, bean.getNombreEstado());
         assertEquals(OBS_TEXT_2, bean.getObservaciones());
     }
 }

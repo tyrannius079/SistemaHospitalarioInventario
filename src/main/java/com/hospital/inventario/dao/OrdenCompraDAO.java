@@ -20,7 +20,7 @@ public class OrdenCompraDAO {
 
     public int registrarOrden(OrdenCompraBean bean, Connection conn) throws SQLException {
         String sql = "INSERT INTO TB_OrdenCompra (idSolicitud, idProforma, idProveedor, idUsuario, "
-                + "idPresupuesto, fechaEmision, total, estado, observaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "idPresupuesto, fechaEmision, total, idEstado, observaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, bean.getIdSolicitud());
             ps.setInt(2, bean.getIdProforma());
@@ -29,7 +29,7 @@ public class OrdenCompraDAO {
             ps.setInt(5, bean.getIdPresupuesto());
             ps.setDate(6, bean.getFechaEmision());
             ps.setDouble(7, bean.getTotal());
-            ps.setString(8, bean.getEstado());
+            ps.setInt(8, bean.getIdEstado());
             ps.setString(9, bean.getObservaciones());
             int rows = ps.executeUpdate();
             if (rows == 0) {
@@ -77,7 +77,7 @@ public class OrdenCompraDAO {
     }
 
     public OrdenCompraBean consultarOrden(int idOrdenCompra) {
-        String sql = "SELECT * FROM TB_OrdenCompra WHERE idOrdenCompra = ?";
+        String sql = "SELECT o.*, e.nombre AS nombreEstado FROM TB_OrdenCompra o JOIN TB_Estado e ON o.idEstado = e.idEstado WHERE o.idOrdenCompra = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idOrdenCompra);
@@ -92,7 +92,8 @@ public class OrdenCompraDAO {
                     bean.setIdPresupuesto(rs.getInt("idPresupuesto"));
                     bean.setFechaEmision(rs.getDate("fechaEmision"));
                     bean.setTotal(rs.getDouble("total"));
-                    bean.setEstado(rs.getString("estado"));
+                    bean.setIdEstado(rs.getInt("idEstado"));
+                    bean.setNombreEstado(rs.getString("nombreEstado"));
                     bean.setObservaciones(rs.getString("observaciones"));
                     return bean;
                 }
@@ -106,7 +107,7 @@ public class OrdenCompraDAO {
 
     public List<OrdenCompraBean> getOrdenes() {
         List<OrdenCompraBean> lista = new ArrayList<>();
-        String sql = "SELECT * FROM TB_OrdenCompra ORDER BY idOrdenCompra DESC";
+        String sql = "SELECT o.*, e.nombre AS nombreEstado FROM TB_OrdenCompra o JOIN TB_Estado e ON o.idEstado = e.idEstado ORDER BY o.idOrdenCompra DESC";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -120,7 +121,8 @@ public class OrdenCompraDAO {
                 bean.setIdPresupuesto(rs.getInt("idPresupuesto"));
                 bean.setFechaEmision(rs.getDate("fechaEmision"));
                 bean.setTotal(rs.getDouble("total"));
-                bean.setEstado(rs.getString("estado"));
+                bean.setIdEstado(rs.getInt("idEstado"));
+                bean.setNombreEstado(rs.getString("nombreEstado"));
                 bean.setObservaciones(rs.getString("observaciones"));
                 lista.add(bean);
             }
@@ -132,10 +134,10 @@ public class OrdenCompraDAO {
     }
 
     public boolean modificarOrden(OrdenCompraBean bean) {
-        String sql = "UPDATE TB_OrdenCompra SET estado = ?, observaciones = ? WHERE idOrdenCompra = ?";
+        String sql = "UPDATE TB_OrdenCompra SET idEstado = ?, observaciones = ? WHERE idOrdenCompra = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, bean.getEstado());
+            ps.setInt(1, bean.getIdEstado());
             ps.setString(2, bean.getObservaciones());
             ps.setInt(3, bean.getIdOrdenCompra());
             return ps.executeUpdate() > 0;

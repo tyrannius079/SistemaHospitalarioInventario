@@ -43,7 +43,7 @@ public class ProveedorDAO {
                     bean.setDireccion(rs.getString("direccion"));
                     bean.setTelefono(rs.getString("telefono"));
                     bean.setEmail(rs.getString("email"));
-                    bean.setEstado(rs.getString("estado"));
+                    bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                     return bean;
                 }
             }
@@ -68,7 +68,7 @@ public class ProveedorDAO {
                 bean.setDireccion(rs.getString("direccion"));
                 bean.setTelefono(rs.getString("telefono"));
                 bean.setEmail(rs.getString("email"));
-                bean.setEstado(rs.getString("estado"));
+                bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                 lista.add(bean);
             }
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class ProveedorDAO {
 
     public boolean registrarProveedor(ProveedorBean bean) {
         String sql = "INSERT INTO TB_Proveedor (razonSocial, ruc, direccion, telefono, email, estado) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, 1)";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, bean.getRazonSocial());
@@ -88,7 +88,7 @@ public class ProveedorDAO {
             ps.setString(3, bean.getDireccion());
             ps.setString(4, bean.getTelefono());
             ps.setString(5, bean.getEmail());
-            ps.setString(6, bean.getEstado());
+            // estado se inserta como 1
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error SQL detectado en ProveedorDAO.", e);

@@ -34,7 +34,7 @@ public class DashboardServlet extends HttpServlet {
         // 1. KPIs
         List<OrdenCompraBean> ordenes = ordenCompraServices.getOrdenes();
         long totalOrdenesPendientes = ordenes.stream()
-                .filter(o -> "EMITIDA".equalsIgnoreCase(o.getEstado()) || "PENDIENTE".equalsIgnoreCase(o.getEstado()))
+                .filter(o -> "EMITIDA".equalsIgnoreCase(o.getNombreEstado()) || "PENDIENTE".equalsIgnoreCase(o.getNombreEstado()))
                 .count();
 
         List<MovimientoInventarioBean> movs = movServices.getMovimientos();

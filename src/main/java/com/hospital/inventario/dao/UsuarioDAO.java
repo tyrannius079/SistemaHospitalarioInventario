@@ -17,7 +17,7 @@ public class UsuarioDAO {
 
     public List<UsuarioBean> getUsuarios() {
         List<UsuarioBean> lista = new ArrayList<>();
-        String sql = "SELECT * FROM TB_Usuario";
+        String sql = "SELECT u.*, r.nombre AS nombreRol FROM TB_Usuario u JOIN TB_Rol r ON u.idRol = r.idRol";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -27,8 +27,9 @@ public class UsuarioDAO {
                 bean.setDni(rs.getString("dni"));
                 bean.setNombre(rs.getString("nombres") + " " + rs.getString("apellidos"));
                 bean.setCorreo(rs.getString("email"));
-                bean.setRol(rs.getString("rol"));
-                bean.setEstado(rs.getString("estado").equals("A") ? "ACTIVO" : "INACTIVO");
+                bean.setIdRol(rs.getInt("idRol"));
+                bean.setNombreRol(rs.getString("nombreRol"));
+                bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                 lista.add(bean);
             }
         } catch (SQLException e) {
@@ -38,7 +39,7 @@ public class UsuarioDAO {
     }
 
     public boolean crearUsuario(UsuarioBean bean, String rawPassword) {
-        String sql = "INSERT INTO TB_Usuario (dni, nombres, apellidos, email, password, rol, estado) VALUES (?, ?, ?, ?, ?, ?, 'A')";
+        String sql = "INSERT INTO TB_Usuario (dni, nombres, apellidos, email, password, idRol, estado) VALUES (?, ?, ?, ?, ?, ?, 1)";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, bean.getDni());
@@ -50,7 +51,7 @@ public class UsuarioDAO {
             
             ps.setString(4, bean.getCorreo());
             ps.setString(5, rawPassword);
-            ps.setString(6, bean.getRol());
+            ps.setInt(6, bean.getIdRol());
             
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -60,7 +61,7 @@ public class UsuarioDAO {
     }
 
     public boolean editarUsuario(UsuarioBean bean) {
-        String sql = "UPDATE TB_Usuario SET nombres = ?, apellidos = ?, email = ?, rol = ? WHERE dni = ?";
+        String sql = "UPDATE TB_Usuario SET nombres = ?, apellidos = ?, email = ?, idRol = ? WHERE dni = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
@@ -68,7 +69,7 @@ public class UsuarioDAO {
             ps.setString(1, partes[0]);
             ps.setString(2, partes.length > 1 ? partes[1] : "");
             ps.setString(3, bean.getCorreo());
-            ps.setString(4, bean.getRol());
+            ps.setInt(4, bean.getIdRol());
             ps.setString(5, bean.getDni());
             
             return ps.executeUpdate() > 0;
@@ -79,7 +80,7 @@ public class UsuarioDAO {
     }
     
     public boolean desactivarUsuario(String dni) {
-        String sql = "UPDATE TB_Usuario SET estado = 'I' WHERE dni = ?";
+        String sql = "UPDATE TB_Usuario SET estado = 0 WHERE dni = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, dni);
@@ -91,7 +92,7 @@ public class UsuarioDAO {
     }
 
     public UsuarioBean validarLogin(String dni, String password) {
-        String sql = "SELECT * FROM TB_Usuario WHERE dni = ? AND password = ? AND estado = 'A'";
+        String sql = "SELECT u.*, r.nombre AS nombreRol FROM TB_Usuario u JOIN TB_Rol r ON u.idRol = r.idRol WHERE u.dni = ? AND u.password = ? AND u.estado = 1";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, dni);
@@ -101,7 +102,8 @@ public class UsuarioDAO {
                     UsuarioBean bean = new UsuarioBean();
                     bean.setIdUsuario(rs.getInt("idUsuario"));
                     bean.setNombre(rs.getString("nombres") + " " + rs.getString("apellidos"));
-                    bean.setRol(rs.getString("rol"));
+                    bean.setIdRol(rs.getInt("idRol"));
+                    bean.setNombreRol(rs.getString("nombreRol"));
                     return bean;
                 }
             }

@@ -51,7 +51,11 @@ public class UsuarioServlet extends HttpServlet {
         bean.setDni(safeText(request.getParameter("dni")));
         bean.setNombre(safeText(request.getParameter("nombre")));
         bean.setCorreo(safeText(request.getParameter("correo")));
-        bean.setRol(safeText(request.getParameter("rol")));
+        try {
+            bean.setIdRol(Integer.parseInt(safeText(request.getParameter("rol"))));
+        } catch (NumberFormatException e) {
+            bean.setIdRol(3); // default técnico
+        }
         String password = safeText(request.getParameter("password"));
 
         boolean ok = usuarioServices.crearUsuario(bean, password);
@@ -68,7 +72,11 @@ public class UsuarioServlet extends HttpServlet {
         bean.setDni(safeText(request.getParameter("dni")));
         bean.setNombre(safeText(request.getParameter("nombre")));
         bean.setCorreo(safeText(request.getParameter("correo")));
-        bean.setRol(safeText(request.getParameter("rol")));
+        try {
+            bean.setIdRol(Integer.parseInt(safeText(request.getParameter("rol"))));
+        } catch (NumberFormatException e) {
+            bean.setIdRol(3); // default técnico
+        }
 
         boolean ok = usuarioServices.editarUsuario(bean);
         

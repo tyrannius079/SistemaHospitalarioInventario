@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class ConexionBD {
     private static final Logger logger = LoggerFactory.getLogger(ConexionBD.class);
-    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/hospitaldb?useSSL=false&serverTimezone=UTC";
+    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/hospitaldb?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8";
     private static final String DEFAULT_USER = "hospital";
     private static final String DEFAULT_PASSWORD = "hospital";
 

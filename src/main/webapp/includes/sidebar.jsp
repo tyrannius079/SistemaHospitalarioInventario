@@ -165,7 +165,7 @@
         </li>
 
         <!-- Sección Seguridad -->
-        <c:if test="${sessionScope.usuarioLogueado.rol == 'Administrador' || empty sessionScope.usuarioLogueado}">
+        <c:if test="${sessionScope.usuarioLogueado.nombreRol == 'ADMINISTRADOR' || empty sessionScope.usuarioLogueado}">
             <li class="px-4 mt-4 mb-2 text-uppercase fw-bold section-title">Sistema</li>
             <li>
                 <a href="#submenuSeguridad" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle d-flex align-items-center">
@@ -197,7 +197,7 @@
                 </div>
                 <div class="text-end d-none d-md-block mt-1">
                     <div class="fw-bold lh-1" style="font-size: 0.9rem;">${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.nombre : 'Usuario Activo'}</div>
-                    <small class="text-primary fw-bold" style="font-size: 0.7rem; text-transform: uppercase;">${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.rol : 'ADMINISTRADOR'}</small>
+                    <small class="text-primary fw-bold" style="font-size: 0.7rem; text-transform: uppercase;">${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.nombreRol : 'ADMINISTRADOR'}</small>
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-3" aria-labelledby="dropdownUser">

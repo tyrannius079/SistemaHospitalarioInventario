@@ -58,7 +58,11 @@ public class OrdenCompraServlet extends HttpServlet {
             
             OrdenCompraBean bean = new OrdenCompraBean();
             bean.setIdOrdenCompra(idOrdenCompra);
-            bean.setEstado(estado);
+            try {
+                bean.setIdEstado(Integer.parseInt(estado));
+            } catch (NumberFormatException e) {
+                bean.setIdEstado(1);
+            }
             bean.setObservaciones("Estado actualizado a " + estado);
             
             boolean ok = ordenCompraServices.modificarOrden(bean);
@@ -78,7 +82,11 @@ public class OrdenCompraServlet extends HttpServlet {
         bean.setIdUsuario(parseInt(request.getParameter("idUsuario")));
         bean.setIdPresupuesto(parseInt(request.getParameter("idPresupuesto")));
         bean.setFechaEmision(parseDate(request.getParameter("fechaEmision")));
-        bean.setEstado(safeText(request.getParameter("estado")));
+        try {
+            bean.setIdEstado(Integer.parseInt(safeText(request.getParameter("estado"))));
+        } catch (NumberFormatException e) {
+            bean.setIdEstado(1);
+        }
         bean.setObservaciones(safeText(request.getParameter("observaciones")));
 
         List<DetalleOrdenCompraBean> detalles = buildDetalles(request);

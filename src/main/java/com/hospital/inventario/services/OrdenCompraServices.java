@@ -59,8 +59,8 @@ public class OrdenCompraServices implements IOrdenCompraServices {
         if (bean.getFechaEmision() == null) {
             bean.setFechaEmision(new Date(System.currentTimeMillis()));
         }
-        if (bean.getEstado() == null || bean.getEstado().isEmpty()) {
-            bean.setEstado("EMITIDA");
+        if (bean.getNombreEstado() == null || bean.getNombreEstado().isEmpty()) {
+            bean.setIdEstado(1); // 1 = EMITIDA
         }
 
         try (Connection conn = ConexionBD.getConnection()) {

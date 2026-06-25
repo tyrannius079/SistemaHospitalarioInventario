@@ -61,16 +61,16 @@
                                 <td class="text-end fw-bold">${orden.total}</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${orden.estado == 'EMITIDA'}">
+                                        <c:when test="${orden.nombreEstado == 'EMITIDA'}">
                                             <span class="badge bg-warning text-dark border border-warning"><i class="fas fa-clock me-1"></i> EMITIDA</span>
                                         </c:when>
-                                        <c:when test="${orden.estado == 'APROBADA'}">
+                                        <c:when test="${orden.nombreEstado == 'APROBADA'}">
                                             <span class="badge bg-primary"><i class="fas fa-thumbs-up me-1"></i> APROBADA</span>
                                         </c:when>
-                                        <c:when test="${orden.estado == 'RECEPCIONADA'}">
+                                        <c:when test="${orden.nombreEstado == 'RECEPCIONADA'}">
                                             <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> RECEPCIONADA</span>
                                         </c:when>
-                                        <c:when test="${orden.estado == 'ANULADA'}">
+                                        <c:when test="${orden.nombreEstado == 'ANULADA'}">
                                             <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> ANULADA</span>
                                         </c:when>
                                     </c:choose>
@@ -79,8 +79,8 @@
                                     <button class="btn btn-sm btn-outline-info" title="Imprimir" onclick="imprimirPDF('OC-${orden.idOrdenCompra}')">
                                         <i class="fas fa-file-pdf"></i>
                                     </button>
-                                    <c:if test="${orden.estado != 'ANULADA' && orden.estado != 'RECEPCIONADA'}">
-                                        <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('OC-${orden.idOrdenCompra}', '${orden.estado}')">
+                                    <c:if test="${orden.nombreEstado != 'ANULADA' && orden.nombreEstado != 'RECEPCIONADA'}">
+                                        <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('OC-${orden.idOrdenCompra}', '${orden.nombreEstado}')">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
                                     </c:if>

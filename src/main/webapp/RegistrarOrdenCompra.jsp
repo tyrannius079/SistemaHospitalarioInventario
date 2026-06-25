@@ -175,7 +175,7 @@
                                 <div>
                                     <!-- Aquí no se pone un select libre, sino el de la sesión -->
                                     <div class="fw-bold">${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.nombre : 'Admin. Compras'}</div>
-                                    <div class="small text-muted">${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.rol : 'Administrador'}</div>
+                                    <div class="small text-muted">${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.nombreRol : 'ADMINISTRADOR'}</div>
                                     <!-- Input oculto para que viaje al backend -->
                                     <input type="hidden" name="idUsuario" value="${not empty sessionScope.usuarioLogueado ? sessionScope.usuarioLogueado.idUsuario : 1}">
                                 </div>
