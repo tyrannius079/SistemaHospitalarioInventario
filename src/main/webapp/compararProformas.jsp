@@ -7,7 +7,7 @@
     <!-- Encabezado -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold text-dark mb-0">Comparación de Proformas</h3>
+            <h3 class="fw-bold text-dark mb-0">Comparación de Proformas <span class="badge bg-warning text-dark ms-2 align-middle" style="font-size: 0.8rem;"><i class="fas fa-tools me-1"></i>En construcción</span></h3>
             <p class="text-muted mb-0">Análisis de cotizaciones para toma de decisiones de compra.</p>
         </div>
         <div>

@@ -58,11 +58,22 @@ public class OrdenCompraServlet extends HttpServlet {
             
             OrdenCompraBean bean = new OrdenCompraBean();
             bean.setIdOrdenCompra(idOrdenCompra);
-            try {
-                bean.setIdEstado(Integer.parseInt(estado));
-            } catch (NumberFormatException e) {
-                bean.setIdEstado(1);
+            
+            int idEstado = 1; // PENDIENTE por defecto
+            switch (estado.toUpperCase()) {
+                case "APROBADA": idEstado = 2; break;
+                case "EMITIDA": idEstado = 4; break;
+                case "ANULADA": idEstado = 6; break;
+                case "CANCELADA": idEstado = 6; break;
+                case "RECEPCIONADA": idEstado = 5; break;
+                default:
+                    try {
+                        idEstado = Integer.parseInt(estado);
+                    } catch (NumberFormatException e) {
+                        idEstado = 1;
+                    }
             }
+            bean.setIdEstado(idEstado);
             bean.setObservaciones("Estado actualizado a " + estado);
             
             boolean ok = ordenCompraServices.modificarOrden(bean);
@@ -82,11 +93,22 @@ public class OrdenCompraServlet extends HttpServlet {
         bean.setIdUsuario(parseInt(request.getParameter("idUsuario")));
         bean.setIdPresupuesto(parseInt(request.getParameter("idPresupuesto")));
         bean.setFechaEmision(parseDate(request.getParameter("fechaEmision")));
-        try {
-            bean.setIdEstado(Integer.parseInt(safeText(request.getParameter("estado"))));
-        } catch (NumberFormatException e) {
-            bean.setIdEstado(1);
+        String estadoCreate = safeText(request.getParameter("estado"));
+        int idEstadoCreate = 1;
+        switch (estadoCreate.toUpperCase()) {
+            case "APROBADA": idEstadoCreate = 2; break;
+            case "EMITIDA": idEstadoCreate = 4; break;
+            case "ANULADA": idEstadoCreate = 6; break;
+            case "CANCELADA": idEstadoCreate = 6; break;
+            case "RECEPCIONADA": idEstadoCreate = 5; break;
+            default:
+                try {
+                    idEstadoCreate = Integer.parseInt(estadoCreate);
+                } catch (NumberFormatException e) {
+                    idEstadoCreate = 1;
+                }
         }
+        bean.setIdEstado(idEstadoCreate);
         bean.setObservaciones(safeText(request.getParameter("observaciones")));
 
         List<DetalleOrdenCompraBean> detalles = buildDetalles(request);

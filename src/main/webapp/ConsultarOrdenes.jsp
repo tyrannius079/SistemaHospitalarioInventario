@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <jsp:include page="/includes/header.jsp" />
 <jsp:include page="/includes/sidebar.jsp" />
@@ -150,29 +150,10 @@
                 event.stopPropagation();
                 formEstado.classList.add('was-validated');
             } else {
-                event.preventDefault(); // Interceptamos para UX
-                
+                // Removemos el event.preventDefault() para que realmente envíe el POST al backend.
                 const btnGuardar = document.getElementById('btnGuardarEstado');
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
-                
-                // Simulación de actualización exitosa AJAX
-                setTimeout(() => {
-                    const nuevoEstadoVal = document.getElementById('mod_nuevoEstado').value;
-                    const nuevoEstadoText = document.getElementById('mod_nuevoEstado').options[document.getElementById('mod_nuevoEstado').selectedIndex].text;
-                    const idOrden = document.getElementById('mod_idOrden').value;
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Estado Actualizado',
-                        text: 'La orden ' + idOrden + ' ahora está ' + nuevoEstado,
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        // En la vida real haríamos location.reload() o actualizar el DOM.
-                        location.reload(); 
-                    });
-                }, 1000);
             }
         }, false);
     });
