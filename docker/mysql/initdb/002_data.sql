@@ -68,3 +68,16 @@ INSERT INTO TB_OrdenCompra (idSolicitud, idProforma, idProveedor, idUsuario, idP
 -- Asumiendo idInsumo 3 = Suero (INS-0005)
 INSERT INTO TB_Lote (numeroLote, idInsumo, fechaIngreso, fechaVencimiento, cantidadInicial, cantidadActual, estado) VALUES
 ('L-998822', 3, '2025-06-01', DATE_ADD(CURDATE(), INTERVAL 25 DAY), 500, 45, 'A');
+
+-- 10. DETALLE DE ORDENES DE COMPRA
+-- Orden 1 (id 1): Paracetamol (1)
+INSERT INTO TB_DetalleOrdenCompra (idOrdenCompra, idInsumo, cantidad, precioUnitario, subtotal) VALUES
+(1, 1, 500, 15.50, 7750.00),
+(1, 3, 200, 5.00, 1000.00);
+
+-- 11. MOVIMIENTOS DE INVENTARIO
+-- Simulamos Entradas y Salidas recientes
+INSERT INTO TB_MovimientoInventario (idInsumo, idLote, idOrdenCompra, idUsuario, fechaMovimiento, tipoMovimiento, cantidad, observaciones) VALUES
+(1, NULL, 1, 1, DATE_SUB(NOW(), INTERVAL 2 DAY), 'ENTRADA', 100, 'Recepción de OC parcial'),
+(2, NULL, NULL, 2, DATE_SUB(NOW(), INTERVAL 1 DAY), 'SALIDA', 50, 'Destino: Emergencia - Pacientes febriles'),
+(3, 1, NULL, 2, NOW(), 'AJUSTE', -5, 'Merma por frasco roto');

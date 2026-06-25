@@ -33,7 +33,7 @@
                     </div>
                     <div>
                         <h6 class="mb-0 text-white-50 fw-bold text-uppercase">Total de Insumos Activos</h6>
-                        <h2 class="mb-0 fw-bold">1,245</h2>
+                        <h2 class="mb-0 fw-bold">${not empty totalInsumos ? totalInsumos : '0'}</h2>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     </div>
                     <div>
                         <h6 class="mb-0 text-white-50 fw-bold text-uppercase">Alertas Stock Mínimo</h6>
-                        <h2 class="mb-0 fw-bold">18</h2>
+                        <h2 class="mb-0 fw-bold">${not empty alertasStock ? alertasStock : '0'}</h2>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                     </div>
                     <div>
                         <h6 class="mb-0 text-white-50 fw-bold text-uppercase">Nivel de Abastecimiento</h6>
-                        <h2 class="mb-0 fw-bold">94%</h2>
+                        <h2 class="mb-0 fw-bold">${not empty nivelAbastecimiento ? nivelAbastecimiento : '0'}%</h2>
                     </div>
                 </div>
             </div>
