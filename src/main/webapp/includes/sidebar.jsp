@@ -214,3 +214,49 @@
     </nav>
     <!-- Inicio del Main Content de cada vista -->
     <div class="main-content p-4" style="background-color: #f1f5f9; min-height: calc(100vh - 76px);">
+
+    <!-- Script para mantener el estado activo del menú del Sidebar según la URL -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Obtener la ruta del archivo actual
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            
+            // 2. Si estamos en el index, no hacemos nada (Dashboard ya activo)
+            if (currentFile === '' || currentFile === 'index.jsp') return;
+            
+            // Remover el 'active' por defecto del Dashboard
+            const dashboardItem = document.querySelector('#sidebar .components > li.active');
+            if(dashboardItem) dashboardItem.classList.remove('active');
+
+            // 3. Buscar todos los enlaces de los submenús
+            const sidebarLinks = document.querySelectorAll('#sidebar ul.collapse li a');
+            
+            sidebarLinks.forEach(function(link) {
+                const linkHref = link.getAttribute('href');
+                
+                // Si el href del enlace contiene el nombre del archivo actual
+                if (linkHref && linkHref.includes(currentFile)) {
+                    
+                    // a) Aplicar estilos de "Activo" al enlace hijo
+                    link.style.color = '#ffffff';
+                    link.style.borderLeft = '4px solid #38bdf8';
+                    link.style.backgroundColor = '#1e293b';
+                    
+                    // b) Encontrar el submenú (ul.collapse) padre y forzar su apertura
+                    const parentCollapse = link.closest('ul.collapse');
+                    if (parentCollapse) {
+                        parentCollapse.classList.add('show');
+                        
+                        // c) Encontrar el botón (a.dropdown-toggle) que abrió esto y cambiar su estado visual
+                        const collapseId = parentCollapse.getAttribute('id');
+                        const toggleBtn = document.querySelector('a[href="#' + collapseId + '"]');
+                        if (toggleBtn) {
+                            toggleBtn.setAttribute('aria-expanded', 'true');
+                            toggleBtn.parentElement.classList.add('active'); // Estilo activo al padre
+                        }
+                    }
+                }
+            });
+        });
+    </script>
