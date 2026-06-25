@@ -2,6 +2,7 @@
 -- SCRIPT DE POBLACIÓN INICIAL (DATA DE PRUEBA) - SIGINV PRO
 -- ADAPTADO A: 001_schema.sql
 -- ==========================================================
+SET NAMES 'utf8mb4';
 USE hospitaldb;
 
 -- Limpiar tablas por seguridad (si se re-ejecuta)
@@ -37,14 +38,15 @@ INSERT INTO TB_Estado (nombre, contexto) VALUES
 
 -- 2. USUARIOS
 INSERT INTO TB_Usuario (dni, nombres, apellidos, email, password, idRol, estado) VALUES
-('71234567', 'Juan', 'Pérez', 'jperez@hospital.gob.pe', '123456', 1, 1),
-('40556677', 'María', 'Ramos', 'mramos@hospital.gob.pe', '123456', 2, 1),
-('45612378', 'Carlos', 'Gómez', 'cgomez@hospital.gob.pe', '123456', 3, 1);
+('71234567', 'Juan', 'Perez', 'jperez@hospital.gob.pe', '123456', 1, 1),
+('40556677', 'Maria', 'Ramos', 'mramos@hospital.gob.pe', '123456', 2, 1),
+('72345678', 'Maria', 'Gomez', 'mgomez@hospital.gob.pe', '123456', 2, 1);
 
--- 2. CATEGORÍAS
+-- 2. CATEGORIAS
 INSERT INTO TB_Categoria (nombre, descripcion, estado) VALUES
-('Fármacos y medicinas', 'Medicamentos de uso común', 1),
-('Material Médico', 'Jeringas, gasas, guantes, etc.', 1);
+('MED', 'Medicamentos', 'Insumos farmaceuticos y medicinas', 1),
+('MAT', 'Material Medico', 'Consumibles, gasas, jeringas, etc.', 1),
+('EQP', 'Equipos', 'Equipos medicos menores', 1);
 
 -- 3. PROVEEDORES
 INSERT INTO TB_Proveedor (ruc, razonSocial, contacto, telefono, email, direccion, estado) VALUES
@@ -52,11 +54,10 @@ INSERT INTO TB_Proveedor (ruc, razonSocial, contacto, telefono, email, direccion
 ('20222222222', 'Medicos Global EIRL', 'Andrea Suaste', '912345678', 'ventas@medicglobal.pe', 'Av. Brasil 456', 1);
 
 -- 4. INSUMOS 
--- Asumiendo que idCategoria 1 = Fármacos y 2 = Material Médico
+-- Asumiendo que idCategoria 1 = Farmacos y 2 = Material Medico
 INSERT INTO TB_Insumo (codigo, nombre, descripcion, unidadMedida, stockActual, stockMinimo, precioUnitario, idCategoria, estado) VALUES
-('INS-0001', 'Paracetamol 500mg', 'Caja x 100 tabletas', 'CAJA', 200, 50, 15.50, 1, 1),
-('INS-0002', 'Amoxicilina 250mg', 'Frasco x 60ml jarabe', 'FRASCO', 5, 20, 8.20, 1, 1),
-('INS-0003', 'Suero Fisiológico 1L', 'Bolsa x 1 litro', 'UNIDAD', 150, 30, 5.00, 2, 1);
+('INS-002', 'Ibuprofeno 400mg', 'Caja de 100 tabletas', 'CAJA', 150, 50, 18.00, 1, 1),
+('INS-003', 'Jeringa 5ml', 'Caja de 50 jeringas descartables', 'CAJA', 200, 100, 15.50, 2, 1);
 
 -- 5. PRESUPUESTOS
 INSERT INTO TB_Presupuesto (periodo, montoTotal, montoDisponible, estado) VALUES
