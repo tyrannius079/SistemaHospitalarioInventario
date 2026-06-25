@@ -145,17 +145,53 @@
                 const btn = document.getElementById('btnRegistrar');
                 btn.disabled = true;
                 
-                // Alert de carga y luego submit real
+                // Alert de carga y submit por AJAX para evitar redirección
                 Swal.fire({
                     title: 'Procesando...',
                     text: 'Registrando la entrada en almacén',
                     allowOutsideClick: false,
                     didOpen: () => {
                         Swal.showLoading();
-                        setTimeout(() => {
-                            formEntrada.submit();
-                        }, 800);
                     }
+                });
+
+                const formData = new FormData(formEntrada);
+                const params = new URLSearchParams();
+                for (const pair of formData) {
+                    params.append(pair[0], pair[1]);
+                }
+
+                fetch(formEntrada.action || window.location.href, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params
+                })
+                .then(response => response.text())
+                .then(html => {
+                    let mensajeExito = 'El ingreso al Kardex se registró exitosamente.';
+                    // Si el backend imprime algún texto confirmando ID, lo extraemos
+                    const match = html.match(/(Entrada registrada con ID:\s*\d+|Operación realizada)/i);
+                    if (match) mensajeExito = match[1];
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Ingreso Completado!',
+                        text: mensajeExito,
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#0d6efd'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al registrar la entrada.'
+                    });
+                    btn.disabled = false;
                 });
             }
         }, false);

@@ -148,17 +148,52 @@
                         const btn = document.getElementById('btnProcesar');
                         btn.disabled = true;
                         
-                        // Alert de carga y luego submit real
+                        // Alert de carga y submit por AJAX para evitar redirección
                         Swal.fire({
                             title: 'Procesando...',
                             text: 'Actualizando Kardex',
                             allowOutsideClick: false,
                             didOpen: () => {
                                 Swal.showLoading();
-                                setTimeout(() => {
-                                    formSalida.submit();
-                                }, 800);
                             }
+                        });
+
+                        const formData = new FormData(formSalida);
+                        const params = new URLSearchParams();
+                        for (const pair of formData) {
+                            params.append(pair[0], pair[1]);
+                        }
+
+                        fetch(formSalida.action || window.location.href, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: params
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            let mensajeExito = 'La salida/ajuste ha sido registrada exitosamente en el sistema.';
+                            const match = html.match(/(Operación realizada|Registrado con éxito)/i);
+                            if (match) mensajeExito = 'El Kardex ha sido actualizado.';
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Movimiento Confirmado!',
+                                text: mensajeExito,
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#0d6efd'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error de Red',
+                                text: 'No se pudo completar el movimiento.'
+                            });
+                            btn.disabled = false;
                         });
                     }
                 });

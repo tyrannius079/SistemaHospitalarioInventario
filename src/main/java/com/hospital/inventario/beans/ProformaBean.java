@@ -8,19 +8,21 @@ public class ProformaBean {
     private Date fechaEmision;
     private double montoTotal;
     private int tiempoEntregaDias;
-    private String estado;
+    private int idEstado;
+    private String nombreEstado;
+    private String razonSocialProveedor;
 
     public ProformaBean() {
     }
 
     public ProformaBean(int idProforma, int idProveedor, Date fechaEmision, double montoTotal,
-                        int tiempoEntregaDias, String estado) {
+                        int tiempoEntregaDias, int idEstado) {
         this.idProforma = idProforma;
         this.idProveedor = idProveedor;
         this.fechaEmision = fechaEmision;
         this.montoTotal = montoTotal;
         this.tiempoEntregaDias = tiempoEntregaDias;
-        this.estado = estado;
+        this.idEstado = idEstado;
     }
 
     public int getIdProforma() {
@@ -63,11 +65,32 @@ public class ProformaBean {
         this.tiempoEntregaDias = tiempoEntregaDias;
     }
 
-    public String getEstado() {
-        return estado;
+    public int getIdEstado() {
+        return idEstado;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setIdEstado(int idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public String getNombreEstado() {
+        return nombreEstado;
+    }
+
+    public void setNombreEstado(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
+    }
+
+    public String getRazonSocialProveedor() {
+        return razonSocialProveedor;
+    }
+
+    public void setRazonSocialProveedor(String razonSocialProveedor) {
+        this.razonSocialProveedor = razonSocialProveedor;
+    }
+
+    public String getCodigoFormateado() {
+        if (idProforma <= 0) return "Generado Automáticamente";
+        return String.format("PROF-2026-%04d", idProforma);
     }
 }

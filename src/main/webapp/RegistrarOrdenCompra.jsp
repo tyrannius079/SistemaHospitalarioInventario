@@ -31,7 +31,7 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label text-muted small fw-bold">N° Orden (Auto)</label>
-                                <input type="text" class="form-control bg-light text-secondary fw-bold" value="OC-2026-0015" readonly tabindex="-1">
+                                <input type="text" class="form-control bg-light text-secondary fw-bold text-center" value="Generado Automáticamente" readonly tabindex="-1">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label text-muted small fw-bold">Fecha de Emisión</label>
@@ -330,21 +330,63 @@
                     text: 'Complete todos los campos obligatorios (*)'
                 });
             } else {
-                event.preventDefault(); // Interceptamos para efecto visual UX
+                // Interceptamos para efecto visual UX y evitar redirección
+                event.preventDefault(); 
                 const btn = document.getElementById('btnEmitir');
                 btn.disabled = true;
                 
-                // Alert de carga y luego submit real
+                // Mostrar spinner de carga
                 Swal.fire({
                     title: 'Procesando...',
                     text: 'Emitiendo Orden de Compra',
                     allowOutsideClick: false,
                     didOpen: () => {
                         Swal.showLoading();
-                        setTimeout(() => {
-                            formOC.submit();
-                        }, 800);
                     }
+                });
+
+                // Enviar formulario por AJAX (fetch) para evitar redirección de página
+                const formData = new FormData(formOC);
+                const params = new URLSearchParams();
+                for (const pair of formData) {
+                    params.append(pair[0], pair[1]);
+                }
+
+                fetch(formOC.action || window.location.href, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params
+                })
+                .then(response => response.text())
+                .then(html => {
+                    // Intentamos extraer el ID si el backend devuelve la vista de éxito en texto
+                    let mensajeExito = 'La orden ha sido registrada correctamente en el sistema.';
+                    const match = html.match(/(Orden registrada con ID:\s*\d+)/i);
+                    if (match) {
+                        mensajeExito = match[1];
+                    }
+
+                    // Mostrar modal de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Operación realizada!',
+                        text: mensajeExito,
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#0d6efd'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Recargar la página o limpiar el form
+                            window.location.reload();
+                        }
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Conexión',
+                        text: 'No se pudo registrar la orden. Verifique su red o el servidor.'
+                    });
+                    btn.disabled = false;
                 });
             }
         }, false);

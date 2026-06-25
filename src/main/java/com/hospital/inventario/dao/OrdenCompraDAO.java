@@ -77,7 +77,10 @@ public class OrdenCompraDAO {
     }
 
     public OrdenCompraBean consultarOrden(int idOrdenCompra) {
-        String sql = "SELECT o.*, e.nombre AS nombreEstado FROM TB_OrdenCompra o JOIN TB_Estado e ON o.idEstado = e.idEstado WHERE o.idOrdenCompra = ?";
+        String sql = "SELECT o.*, e.nombre AS nombreEstado, p.razonSocial FROM TB_OrdenCompra o "
+                + "JOIN TB_Estado e ON o.idEstado = e.idEstado "
+                + "JOIN TB_Proveedor p ON o.idProveedor = p.idProveedor "
+                + "WHERE o.idOrdenCompra = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idOrdenCompra);
@@ -95,6 +98,7 @@ public class OrdenCompraDAO {
                     bean.setIdEstado(rs.getInt("idEstado"));
                     bean.setNombreEstado(rs.getString("nombreEstado"));
                     bean.setObservaciones(rs.getString("observaciones"));
+                    bean.setRazonSocialProveedor(rs.getString("razonSocial"));
                     return bean;
                 }
             }
@@ -107,7 +111,10 @@ public class OrdenCompraDAO {
 
     public List<OrdenCompraBean> getOrdenes() {
         List<OrdenCompraBean> lista = new ArrayList<>();
-        String sql = "SELECT o.*, e.nombre AS nombreEstado FROM TB_OrdenCompra o JOIN TB_Estado e ON o.idEstado = e.idEstado ORDER BY o.idOrdenCompra DESC";
+        String sql = "SELECT o.*, e.nombre AS nombreEstado, p.razonSocial FROM TB_OrdenCompra o "
+                + "JOIN TB_Estado e ON o.idEstado = e.idEstado "
+                + "JOIN TB_Proveedor p ON o.idProveedor = p.idProveedor "
+                + "ORDER BY o.idOrdenCompra DESC";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -124,6 +131,7 @@ public class OrdenCompraDAO {
                 bean.setIdEstado(rs.getInt("idEstado"));
                 bean.setNombreEstado(rs.getString("nombreEstado"));
                 bean.setObservaciones(rs.getString("observaciones"));
+                bean.setRazonSocialProveedor(rs.getString("razonSocial"));
                 lista.add(bean);
             }
         } catch (SQLException e) {

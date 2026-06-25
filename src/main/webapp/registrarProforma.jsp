@@ -29,7 +29,7 @@
                 <div class="row g-3">
                     <div class="col-md-3">
                         <label class="form-label text-muted small fw-bold">N° Proforma (Sistema)</label>
-                        <input type="text" class="form-control bg-light text-secondary fw-bold" value="PROF-2026-0001" readonly tabindex="-1">
+                        <input type="text" class="form-control bg-light text-secondary fw-bold text-center" value="Generado Automáticamente" readonly tabindex="-1">
                     </div>
                     <div class="col-md-5">
                         <label for="idProveedor" class="form-label">Proveedor *</label>

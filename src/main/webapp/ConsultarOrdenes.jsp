@@ -33,30 +33,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="fw-bold text-primary">OC-2026-0015</td>
-                            <td class="text-start">
-                                <div class="fw-bold">Distribuidora Médica S.A.C.</div>
-                            </td>
-                            <td>24/06/2026</td>
-                            <td class="text-end fw-bold">15,450.00</td>
-                            <td>
-                                <span class="badge bg-warning text-dark border border-warning" id="badge_OC-2026-0015"><i class="fas fa-clock me-1"></i> EMITIDA</span>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-info" title="Imprimir PDF" onclick="imprimirPDF('OC-2026-0015')">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('OC-2026-0015', 'EMITIDA')">
-                                    <i class="fas fa-sync-alt"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- JSTL Dinámico -->
                         <c:forEach var="orden" items="${ordenes}">
                             <tr>
-                                <td class="fw-bold text-primary">OC-${orden.idOrdenCompra}</td>
-                                <td class="text-start">ID Prov: ${orden.idProveedor}</td>
+                                <td class="fw-bold text-primary">${orden.codigoFormateado}</td>
+                                <td class="text-start">
+                                    <div class="fw-bold">${orden.razonSocialProveedor}</div>
+                                </td>
                                 <td>${orden.fechaEmision}</td>
                                 <td class="text-end fw-bold">${orden.total}</td>
                                 <td>
@@ -76,11 +58,11 @@
                                     </c:choose>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-outline-info" title="Imprimir" onclick="imprimirPDF('OC-${orden.idOrdenCompra}')">
+                                    <button class="btn btn-sm btn-outline-info" title="Imprimir" onclick="imprimirPDF('${orden.codigoFormateado}')">
                                         <i class="fas fa-file-pdf"></i>
                                     </button>
                                     <c:if test="${orden.nombreEstado != 'ANULADA' && orden.nombreEstado != 'RECEPCIONADA'}">
-                                        <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('OC-${orden.idOrdenCompra}', '${orden.nombreEstado}')">
+                                        <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('${orden.codigoFormateado}', '${orden.nombreEstado}')">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
                                     </c:if>

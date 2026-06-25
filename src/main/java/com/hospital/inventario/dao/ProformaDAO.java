@@ -17,7 +17,10 @@ public class ProformaDAO {
 
     public List<ProformaBean> getProformas() {
         List<ProformaBean> lista = new ArrayList<>();
-        String sql = "SELECT * FROM TB_Proforma ORDER BY idProforma DESC";
+        String sql = "SELECT p.*, e.nombre AS nombreEstado, prov.razonSocial FROM TB_Proforma p "
+                + "JOIN TB_Estado e ON p.idEstado = e.idEstado "
+                + "JOIN TB_Proveedor prov ON p.idProveedor = prov.idProveedor "
+                + "ORDER BY p.idProforma DESC";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -28,7 +31,9 @@ public class ProformaDAO {
                 bean.setFechaEmision(rs.getDate("fechaEmision"));
                 bean.setMontoTotal(rs.getDouble("montoTotal"));
                 bean.setTiempoEntregaDias(rs.getInt("tiempoEntregaDias"));
-                bean.setEstado(rs.getString("estado"));
+                bean.setIdEstado(rs.getInt("idEstado"));
+                bean.setNombreEstado(rs.getString("nombreEstado"));
+                bean.setRazonSocialProveedor(rs.getString("razonSocial"));
                 lista.add(bean);
             }
         } catch (SQLException e) {
@@ -39,7 +44,7 @@ public class ProformaDAO {
     }
 
     public boolean registrarProforma(ProformaBean bean) {
-        String sql = "INSERT INTO TB_Proforma (idProveedor, fechaEmision, montoTotal, tiempoEntregaDias, estado) "
+        String sql = "INSERT INTO TB_Proforma (idProveedor, fechaEmision, montoTotal, tiempoEntregaDias, idEstado) "
                 + "VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -47,7 +52,7 @@ public class ProformaDAO {
             ps.setDate(2, bean.getFechaEmision());
             ps.setDouble(3, bean.getMontoTotal());
             ps.setInt(4, bean.getTiempoEntregaDias());
-            ps.setString(5, bean.getEstado());
+            ps.setInt(5, bean.getIdEstado());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error SQL detectado en ProformaDAO.", e);

@@ -15,6 +15,7 @@ public class OrdenCompraBean {
     private int idEstado;
     private String nombreEstado;
     private String observaciones;
+    private String razonSocialProveedor;
     private List<DetalleOrdenCompraBean> detalles;
 
     public OrdenCompraBean() {
@@ -128,5 +129,18 @@ public class OrdenCompraBean {
 
     public void setDetalles(List<DetalleOrdenCompraBean> detalles) {
         this.detalles = detalles;
+    }
+
+    public String getRazonSocialProveedor() {
+        return razonSocialProveedor;
+    }
+
+    public void setRazonSocialProveedor(String razonSocialProveedor) {
+        this.razonSocialProveedor = razonSocialProveedor;
+    }
+
+    public String getCodigoFormateado() {
+        if (idOrdenCompra <= 0) return "Generado Automáticamente";
+        return String.format("OC-2026-%04d", idOrdenCompra);
     }
 }
