@@ -33,8 +33,24 @@ public class InventarioServlet extends HttpServlet {
         if ("listar".equals(action)) {
             request.setAttribute("movimientos", movimientoServices.getMovimientos());
             request.getRequestDispatcher("/ConsultarEntradas.jsp").forward(request, response);
+        } else if ("stock".equals(action)) {
+            java.util.List<com.hospital.inventario.beans.InsumoBean> insumos = insumoServices.getInsumos();
+            long totalInsumos = insumos.size();
+            long alertasStock = insumos.stream().filter(i -> i.getStockActual() <= i.getStockMinimo()).count();
+            long insumosOk = insumos.stream().filter(i -> i.getStockActual() > i.getStockMinimo()).count();
+            double nivelAbastecimiento = totalInsumos > 0 ? (double) insumosOk / totalInsumos * 100.0 : 0.0;
+            
+            request.setAttribute("insumos", insumos);
+            request.setAttribute("totalInsumos", totalInsumos);
+            request.setAttribute("alertasStock", alertasStock);
+            request.setAttribute("nivelAbastecimiento", Math.round(nivelAbastecimiento));
+            request.getRequestDispatcher("/ConsultarStock.jsp").forward(request, response);
         } else {
-            request.setAttribute("ordenes", ordenCompraServices.getOrdenes());
+            java.util.List<com.hospital.inventario.beans.OrdenCompraBean> todasLasOrdenes = ordenCompraServices.getOrdenes();
+            java.util.List<com.hospital.inventario.beans.OrdenCompraBean> ordenesAprobadas = todasLasOrdenes.stream()
+                .filter(o -> o.getIdEstado() == 2 || o.getIdEstado() == 4)
+                .collect(java.util.stream.Collectors.toList());
+            request.setAttribute("ordenes", ordenesAprobadas);
             request.setAttribute("insumos", insumoServices.getInsumos());
             request.setAttribute("usuarios", usuarioServices.getUsuarios());
             request.getRequestDispatcher("/RegistrarEntrada.jsp").forward(request, response);

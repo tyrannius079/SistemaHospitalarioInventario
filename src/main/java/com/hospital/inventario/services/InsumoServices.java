@@ -7,7 +7,15 @@ import com.hospital.inventario.services.interfaces.IInsumoServices;
 import java.util.List;
 
 public class InsumoServices implements IInsumoServices {
-    private final InsumoDAO insumoDAO = new InsumoDAO();
+    private final InsumoDAO insumoDAO;
+
+    public InsumoServices() {
+        this.insumoDAO = new InsumoDAO();
+    }
+
+    public InsumoServices(InsumoDAO insumoDAO) {
+        this.insumoDAO = insumoDAO;
+    }
 
     @Override
     public List<InsumoBean> getInsumos() {

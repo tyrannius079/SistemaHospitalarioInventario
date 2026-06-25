@@ -12,6 +12,8 @@ public class MovimientoInventarioBean {
     private String tipoMovimiento;
     private int cantidad;
     private String observaciones;
+    private String nombreInsumo;
+    private String numeroLote;
 
     public MovimientoInventarioBean() {
     }
@@ -100,5 +102,21 @@ public class MovimientoInventarioBean {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public String getNombreInsumo() {
+        return nombreInsumo;
+    }
+
+    public void setNombreInsumo(String nombreInsumo) {
+        this.nombreInsumo = nombreInsumo;
+    }
+
+    public String getNumeroLote() {
+        return numeroLote;
+    }
+
+    public void setNumeroLote(String numeroLote) {
+        this.numeroLote = numeroLote;
     }
 }

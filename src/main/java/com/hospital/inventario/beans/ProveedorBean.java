@@ -31,6 +31,10 @@ public class ProveedorBean {
         this.idProveedor = idProveedor;
     }
 
+    public String getCodigo() {
+        return String.format("PRV-%04d", idProveedor);
+    }
+
     public String getRazonSocial() {
         return razonSocial;
     }

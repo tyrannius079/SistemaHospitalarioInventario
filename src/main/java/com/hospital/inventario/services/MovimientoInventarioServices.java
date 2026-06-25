@@ -7,7 +7,15 @@ import com.hospital.inventario.services.interfaces.IMovimientoInventarioServices
 import java.util.List;
 
 public class MovimientoInventarioServices implements IMovimientoInventarioServices {
-    private final MovimientoInventarioDAO movimientoDAO = new MovimientoInventarioDAO();
+    private final MovimientoInventarioDAO movimientoDAO;
+
+    public MovimientoInventarioServices() {
+        this.movimientoDAO = new MovimientoInventarioDAO();
+    }
+
+    public MovimientoInventarioServices(MovimientoInventarioDAO movimientoDAO) {
+        this.movimientoDAO = movimientoDAO;
+    }
 
     @Override
     public List<MovimientoInventarioBean> getMovimientos() {

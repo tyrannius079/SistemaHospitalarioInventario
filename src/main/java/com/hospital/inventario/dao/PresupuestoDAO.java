@@ -10,8 +10,11 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PresupuestoDAO {
+    private static final Logger logger = LoggerFactory.getLogger(PresupuestoDAO.class);
 
     public List<PresupuestoBean> getPresupuestos() {
         List<PresupuestoBean> lista = new ArrayList<>();
@@ -25,11 +28,12 @@ public class PresupuestoDAO {
                 bean.setPeriodo(rs.getString("periodo"));
                 bean.setMontoTotal(rs.getDouble("montoTotal"));
                 bean.setMontoDisponible(rs.getDouble("montoDisponible"));
-                bean.setEstado(rs.getString("estado"));
+                bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                 lista.add(bean);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error SQL detectado en PresupuestoDAO (lista).", e);
+            return lista;
         }
         return lista;
     }
@@ -38,6 +42,7 @@ public class PresupuestoDAO {
         try (Connection conn = ConexionBD.getConnection()) {
             return consultarPresupuesto(conn, idPresupuesto);
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en PresupuestoDAO (null).", e);
             return null;
         }
     }
@@ -53,7 +58,7 @@ public class PresupuestoDAO {
                     bean.setPeriodo(rs.getString("periodo"));
                     bean.setMontoTotal(rs.getDouble("montoTotal"));
                     bean.setMontoDisponible(rs.getDouble("montoDisponible"));
-                    bean.setEstado(rs.getString("estado"));
+                    bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                     return bean;
                 }
             }
@@ -65,6 +70,7 @@ public class PresupuestoDAO {
         try (Connection conn = ConexionBD.getConnection()) {
             return actualizarDisponible(conn, idPresupuesto, nuevoDisponible);
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en PresupuestoDAO.", e);
             return false;
         }
     }
@@ -75,6 +81,21 @@ public class PresupuestoDAO {
             ps.setDouble(1, nuevoDisponible);
             ps.setInt(2, idPresupuesto);
             return ps.executeUpdate() > 0;
+        }
+    }
+
+    public boolean registrarPresupuesto(PresupuestoBean bean) {
+        String sql = "INSERT INTO TB_Presupuesto (periodo, montoTotal, montoDisponible, estado) VALUES (?, ?, ?, 1)";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, bean.getPeriodo());
+            ps.setDouble(2, bean.getMontoTotal());
+            ps.setDouble(3, bean.getMontoDisponible());
+            // estado se inserta como 1
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error SQL detectado en PresupuestoDAO (registrar).", e);
+            return false;
         }
     }
 }

@@ -7,7 +7,15 @@ import com.hospital.inventario.services.interfaces.IProveedorServices;
 import java.util.List;
 
 public class ProveedorServices implements IProveedorServices {
-    private final ProveedorDAO proveedorDAO = new ProveedorDAO();
+    private final ProveedorDAO proveedorDAO;
+
+    public ProveedorServices() {
+        this.proveedorDAO = new ProveedorDAO();
+    }
+
+    public ProveedorServices(ProveedorDAO proveedorDAO) {
+        this.proveedorDAO = proveedorDAO;
+    }
 
     @Override
     public List<ProveedorBean> getProveedores() {

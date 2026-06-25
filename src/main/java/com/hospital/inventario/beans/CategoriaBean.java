@@ -24,6 +24,10 @@ public class CategoriaBean {
         this.idCategoria = idCategoria;
     }
 
+    public String getCodigo() {
+        return String.format("CAT-%03d", idCategoria);
+    }
+
     public String getNombre() {
         return nombre;
     }

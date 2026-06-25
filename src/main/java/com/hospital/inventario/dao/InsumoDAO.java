@@ -9,8 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InsumoDAO {
+    private static final Logger logger = LoggerFactory.getLogger(InsumoDAO.class);
 
     public InsumoBean consultarInsumo(int idInsumo) {
         String sql = "SELECT * FROM TB_Insumo WHERE idInsumo = ?";
@@ -29,11 +32,12 @@ public class InsumoDAO {
                     bean.setStockMinimo(rs.getInt("stockMinimo"));
                     bean.setPrecioUnitario(rs.getDouble("precioUnitario"));
                     bean.setIdCategoria(rs.getInt("idCategoria"));
-                    bean.setEstado(rs.getString("estado"));
+                    bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                     return bean;
                 }
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO (null).", e);
             return null;
         }
         return null;
@@ -56,10 +60,11 @@ public class InsumoDAO {
                 bean.setStockMinimo(rs.getInt("stockMinimo"));
                 bean.setPrecioUnitario(rs.getDouble("precioUnitario"));
                 bean.setIdCategoria(rs.getInt("idCategoria"));
-                bean.setEstado(rs.getString("estado"));
+                bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
                 lista.add(bean);
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -67,7 +72,7 @@ public class InsumoDAO {
 
     public boolean registrarInsumo(InsumoBean bean) {
         String sql = "INSERT INTO TB_Insumo (codigo, nombre, descripcion, unidadMedida, stockActual, "
-                + "stockMinimo, precioUnitario, idCategoria, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "stockMinimo, precioUnitario, idCategoria, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, bean.getCodigo());
@@ -78,9 +83,10 @@ public class InsumoDAO {
             ps.setInt(6, bean.getStockMinimo());
             ps.setDouble(7, bean.getPrecioUnitario());
             ps.setInt(8, bean.getIdCategoria());
-            ps.setString(9, bean.getEstado());
+            // estado es 1 por defecto
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO.", e);
             return false;
         }
     }
@@ -93,6 +99,7 @@ public class InsumoDAO {
             ps.setInt(2, idInsumo);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en InsumoDAO.", e);
             return false;
         }
     }

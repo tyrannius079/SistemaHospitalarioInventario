@@ -12,8 +12,10 @@ public class OrdenCompraBean {
     private int idPresupuesto;
     private Date fechaEmision;
     private double total;
-    private String estado;
+    private int idEstado;
+    private String nombreEstado;
     private String observaciones;
+    private String razonSocialProveedor;
     private List<DetalleOrdenCompraBean> detalles;
 
     public OrdenCompraBean() {
@@ -21,7 +23,7 @@ public class OrdenCompraBean {
 
     public OrdenCompraBean(int idOrdenCompra, int idSolicitud, int idProforma, int idProveedor,
                            int idUsuario, int idPresupuesto, Date fechaEmision, double total,
-                           String estado, String observaciones) {
+                           String observaciones) {
         this.idOrdenCompra = idOrdenCompra;
         this.idSolicitud = idSolicitud;
         this.idProforma = idProforma;
@@ -30,7 +32,6 @@ public class OrdenCompraBean {
         this.idPresupuesto = idPresupuesto;
         this.fechaEmision = fechaEmision;
         this.total = total;
-        this.estado = estado;
         this.observaciones = observaciones;
     }
 
@@ -98,12 +99,20 @@ public class OrdenCompraBean {
         this.total = total;
     }
 
-    public String getEstado() {
-        return estado;
+    public int getIdEstado() {
+        return idEstado;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setIdEstado(int idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public String getNombreEstado() {
+        return nombreEstado;
+    }
+
+    public void setNombreEstado(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
     }
 
     public String getObservaciones() {
@@ -120,5 +129,18 @@ public class OrdenCompraBean {
 
     public void setDetalles(List<DetalleOrdenCompraBean> detalles) {
         this.detalles = detalles;
+    }
+
+    public String getRazonSocialProveedor() {
+        return razonSocialProveedor;
+    }
+
+    public void setRazonSocialProveedor(String razonSocialProveedor) {
+        this.razonSocialProveedor = razonSocialProveedor;
+    }
+
+    public String getCodigoFormateado() {
+        if (idOrdenCompra <= 0) return "Generado Automáticamente";
+        return String.format("OC-2026-%04d", idOrdenCompra);
     }
 }

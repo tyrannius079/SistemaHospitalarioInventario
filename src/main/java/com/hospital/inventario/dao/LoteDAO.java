@@ -11,12 +11,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoteDAO {
+    private static final Logger logger = LoggerFactory.getLogger(LoteDAO.class);
 
     public boolean registrarLote(LoteBean bean) {
         String sql = "INSERT INTO TB_Lote (numeroLote, idInsumo, fechaIngreso, fechaVencimiento, "
-                + "cantidadInicial, cantidadActual, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "cantidadInicial, cantidadActual, estado) VALUES (?, ?, ?, ?, ?, ?, 1)";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, bean.getNumeroLote());
@@ -25,7 +28,7 @@ public class LoteDAO {
             ps.setDate(4, bean.getFechaVencimiento());
             ps.setInt(5, bean.getCantidadInicial());
             ps.setInt(6, bean.getCantidadActual());
-            ps.setString(7, bean.getEstado());
+            // estado 1
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -36,6 +39,7 @@ public class LoteDAO {
                 return true;
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en LoteDAO.", e);
             return false;
         }
         return false;
@@ -51,6 +55,7 @@ public class LoteDAO {
                 lista.add(mapLote(rs));
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en LoteDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -66,6 +71,7 @@ public class LoteDAO {
                 lista.add(mapLote(rs));
             }
         } catch (SQLException e) {
+            logger.error("Error SQL detectado en LoteDAO (lista).", e);
             return lista;
         }
         return lista;
@@ -82,7 +88,7 @@ public class LoteDAO {
         bean.setFechaVencimiento(fechaVencimiento);
         bean.setCantidadInicial(rs.getInt("cantidadInicial"));
         bean.setCantidadActual(rs.getInt("cantidadActual"));
-        bean.setEstado(rs.getString("estado"));
+        bean.setEstado(rs.getInt("estado") == 1 ? "ACTIVO" : "INACTIVO");
         return bean;
     }
 }

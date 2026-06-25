@@ -6,4 +6,5 @@ import java.util.List;
 public interface IPresupuestoServices {
     List<PresupuestoBean> getPresupuestos();
     PresupuestoBean consultarPresupuesto(int idPresupuesto);
+    boolean registrarPresupuesto(PresupuestoBean bean);
 }

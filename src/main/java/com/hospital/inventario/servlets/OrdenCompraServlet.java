@@ -33,7 +33,27 @@ public class OrdenCompraServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if ("listar".equals(action)) {
+        if ("detalles_json".equals(action)) {
+            int idOrdenCompra = parseInt(request.getParameter("idOrdenCompra"));
+            List<DetalleOrdenCompraBean> detalles = ordenCompraServices.getDetallesPorOrden(idOrdenCompra);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try (java.io.PrintWriter out = response.getWriter()) {
+                if (detalles != null && !detalles.isEmpty()) {
+                    StringBuilder json = new StringBuilder("[");
+                    for (int i = 0; i < detalles.size(); i++) {
+                        DetalleOrdenCompraBean det = detalles.get(i);
+                        json.append(String.format("{\"idInsumo\":%d, \"nombreInsumo\":\"%s\", \"codigoInsumo\":\"%s\", \"cantidad\":%d, \"precioUnitario\":%.2f}",
+                                det.getIdInsumo(), det.getNombreInsumo(), det.getCodigoInsumo(), det.getCantidad(), det.getPrecioUnitario()));
+                        if (i < detalles.size() - 1) json.append(",");
+                    }
+                    json.append("]");
+                    out.print(json.toString());
+                } else {
+                    out.print("[]");
+                }
+            }
+        } else if ("listar".equals(action)) {
             request.setAttribute("ordenes", ordenCompraServices.getOrdenes());
             request.getRequestDispatcher("/ConsultarOrdenes.jsp").forward(request, response);
         } else {
@@ -51,6 +71,45 @@ public class OrdenCompraServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        String action = request.getParameter("action");
+        if ("actualizar".equals(action)) {
+            int idOrdenCompra = parseInt(request.getParameter("idOrdenCompra"));
+            String estado = safeText(request.getParameter("estado"));
+            
+            OrdenCompraBean bean = new OrdenCompraBean();
+            bean.setIdOrdenCompra(idOrdenCompra);
+            
+            int idEstado = 1; // PENDIENTE por defecto
+            switch (estado.toUpperCase()) {
+                case "APROBADA": idEstado = 2; break;
+                case "EMITIDA": idEstado = 4; break;
+                case "ANULADA": idEstado = 6; break;
+                case "CANCELADA": idEstado = 6; break;
+                case "RECEPCIONADA": idEstado = 5; break;
+                default:
+                    try {
+                        idEstado = Integer.parseInt(estado);
+                    } catch (NumberFormatException e) {
+                        idEstado = 1;
+                    }
+            }
+            bean.setIdEstado(idEstado);
+            String obs = safeText(request.getParameter("observaciones"));
+            if (obs.isEmpty()) {
+                obs = "Estado actualizado a " + estado + " (" + new java.util.Date().getTime() + ")";
+            }
+            bean.setObservaciones(obs);
+            
+            boolean ok = ordenCompraServices.modificarOrden(bean);
+            if (ok) {
+                response.sendRedirect(request.getContextPath() + "/orden-compra?action=listar");
+            } else {
+                request.setAttribute("error", "No se pudo actualizar el estado de la orden.");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+            }
+            return;
+        }
+
         OrdenCompraBean bean = new OrdenCompraBean();
         bean.setIdSolicitud(parseInt(request.getParameter("idSolicitud")));
         bean.setIdProforma(parseInt(request.getParameter("idProforma")));
@@ -58,7 +117,22 @@ public class OrdenCompraServlet extends HttpServlet {
         bean.setIdUsuario(parseInt(request.getParameter("idUsuario")));
         bean.setIdPresupuesto(parseInt(request.getParameter("idPresupuesto")));
         bean.setFechaEmision(parseDate(request.getParameter("fechaEmision")));
-        bean.setEstado(safeText(request.getParameter("estado")));
+        String estadoCreate = safeText(request.getParameter("estado"));
+        int idEstadoCreate = 1;
+        switch (estadoCreate.toUpperCase()) {
+            case "APROBADA": idEstadoCreate = 2; break;
+            case "EMITIDA": idEstadoCreate = 4; break;
+            case "ANULADA": idEstadoCreate = 6; break;
+            case "CANCELADA": idEstadoCreate = 6; break;
+            case "RECEPCIONADA": idEstadoCreate = 5; break;
+            default:
+                try {
+                    idEstadoCreate = Integer.parseInt(estadoCreate);
+                } catch (NumberFormatException e) {
+                    idEstadoCreate = 1;
+                }
+        }
+        bean.setIdEstado(idEstadoCreate);
         bean.setObservaciones(safeText(request.getParameter("observaciones")));
 
         List<DetalleOrdenCompraBean> detalles = buildDetalles(request);
