@@ -46,7 +46,11 @@ public class InventarioServlet extends HttpServlet {
             request.setAttribute("nivelAbastecimiento", Math.round(nivelAbastecimiento));
             request.getRequestDispatcher("/ConsultarStock.jsp").forward(request, response);
         } else {
-            request.setAttribute("ordenes", ordenCompraServices.getOrdenes());
+            java.util.List<com.hospital.inventario.beans.OrdenCompraBean> todasLasOrdenes = ordenCompraServices.getOrdenes();
+            java.util.List<com.hospital.inventario.beans.OrdenCompraBean> ordenesAprobadas = todasLasOrdenes.stream()
+                .filter(o -> o.getIdEstado() == 2 || o.getIdEstado() == 4)
+                .collect(java.util.stream.Collectors.toList());
+            request.setAttribute("ordenes", ordenesAprobadas);
             request.setAttribute("insumos", insumoServices.getInsumos());
             request.setAttribute("usuarios", usuarioServices.getUsuarios());
             request.getRequestDispatcher("/RegistrarEntrada.jsp").forward(request, response);
