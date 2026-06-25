@@ -92,7 +92,8 @@ INSERT INTO TB_Proforma (idProveedor, fechaEmision, montoTotal, tiempoEntregaDia
 (1, DATE_SUB(CURDATE(), INTERVAL 14 DAY), 12500.00, 5, 3),
 (2, DATE_SUB(CURDATE(), INTERVAL 9 DAY), 13950.00, 2, 3),
 (3, DATE_SUB(CURDATE(), INTERVAL 4 DAY), 5500.00, 10, 1),
-(4, CURDATE(), 2100.00, 3, 1);
+(4, CURDATE(), 2100.00, 3, 1),
+(5, CURDATE(), 4200.50, 4, 1);
 
 -- 9. ÓRDENES DE COMPRA 
 INSERT INTO TB_OrdenCompra (idSolicitud, idProforma, idProveedor, idUsuario, idPresupuesto, fechaEmision, total, idEstado, observaciones) VALUES
