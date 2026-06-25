@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<c:if test="${empty totalOrdenesPendientes && empty arrayEntradasChart}">
+    <c:redirect url="/dashboard" />
+</c:if>
 <jsp:include page="/includes/header.jsp" />
 <jsp:include page="/includes/sidebar.jsp" />
 
@@ -25,7 +28,7 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs fw-bold text-primary text-uppercase mb-1">Órdenes Pendientes</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty totalOrdenesPendientes ? totalOrdenesPendientes : '12'}</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty totalOrdenesPendientes ? totalOrdenesPendientes : '0'}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-file-invoice-dollar fa-2x text-muted opacity-50"></i>
@@ -41,7 +44,7 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs fw-bold text-success text-uppercase mb-1">Entradas (Hoy)</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty entradasHoy ? entradasHoy : '34'}</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty entradasHoy ? entradasHoy : '0'}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-boxes-stacked fa-2x text-muted opacity-50"></i>
@@ -57,7 +60,7 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs fw-bold text-danger text-uppercase mb-1">Stock Crítico</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty stockCritico ? stockCritico : '5'}</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty stockCritico ? stockCritico : '0'}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-exclamation-triangle fa-2x text-muted opacity-50"></i>
@@ -73,7 +76,7 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs fw-bold text-warning text-uppercase mb-1">Próximos a Vencer</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty proximosVencer ? proximosVencer : '8'}</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">${not empty proximosVencer ? proximosVencer : '0'}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar-times fa-2x text-muted opacity-50"></i>
@@ -108,27 +111,29 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item px-4 py-3 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Paracetamol 500mg</h6>
-                                <small class="text-danger">Stock mínimo superado (12 u.)</small>
-                            </div>
-                            <span class="badge bg-danger rounded-pill">Crítico</span>
-                        </li>
-                        <li class="list-group-item px-4 py-3 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Amoxicilina 250mg</h6>
-                                <small class="text-warning">Vence en 15 días</small>
-                            </div>
-                            <span class="badge bg-warning rounded-pill text-dark">Vencimiento</span>
-                        </li>
-                        <li class="list-group-item px-4 py-3 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Jeringas 5ml</h6>
-                                <small class="text-danger">Agotado (0 u.)</small>
-                            </div>
-                            <span class="badge bg-danger rounded-pill">Crítico</span>
-                        </li>
+                        <c:forEach var="insumo" items="${alertasInsumos}">
+                            <li class="list-group-item px-4 py-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-dark">${insumo.nombre}</h6>
+                                    <small class="text-danger">Stock actual: ${insumo.stockActual} u. (Mín: ${insumo.stockMinimo})</small>
+                                </div>
+                                <span class="badge bg-danger rounded-pill">Crítico</span>
+                            </li>
+                        </c:forEach>
+                        <c:forEach var="lote" items="${alertasLotes}">
+                            <li class="list-group-item px-4 py-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-dark">Lote: ${lote.numeroLote}</h6>
+                                    <small class="text-warning">Vence: ${lote.fechaVencimiento}</small>
+                                </div>
+                                <span class="badge bg-warning rounded-pill text-dark">Vencimiento</span>
+                            </li>
+                        </c:forEach>
+                        <c:if test="${empty alertasInsumos && empty alertasLotes}">
+                            <li class="list-group-item px-4 py-3 text-center text-muted">
+                                No hay alertas críticas por el momento.
+                            </li>
+                        </c:if>
                     </ul>
                 </div>
                 <div class="card-footer bg-white text-center">
@@ -162,13 +167,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         label: "Entradas",
                         backgroundColor: "#198754",
                         hoverBackgroundColor: "#157347",
-                        data: [45, 60, 30, 80, 50, 20, 10],
+                        data: ${not empty arrayEntradasChart ? arrayEntradasChart : '[0,0,0,0,0,0,0]'},
                     },
                     {
                         label: "Salidas",
                         backgroundColor: "#dc3545",
                         hoverBackgroundColor: "#bb2d3b",
-                        data: [30, 40, 25, 50, 45, 30, 15],
+                        data: ${not empty arraySalidasChart ? arraySalidasChart : '[0,0,0,0,0,0,0]'},
                     }
                 ],
             },
