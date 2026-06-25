@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <jsp:include page="/includes/header.jsp" />
 <jsp:include page="/includes/sidebar.jsp" />
@@ -100,6 +100,8 @@
         </div>
 
         <!-- Panel de Acciones -->
+        <div class="d-flex justify-content-end mb-5 gap-2">
+            <input type="hidden" name="montoTotal" id="montoTotalHidden" value="0.00">
         <div class="d-flex justify-content-end mb-5 gap-2">
             <input type="hidden" name="montoTotal" id="montoTotalHidden" value="0.00">
             <button type="button" class="btn btn-secondary px-4"><i class="fas fa-times me-1"></i> Cancelar</button>
@@ -219,5 +221,5 @@
         document.getElementById('lblIgv').textContent = igv.toFixed(2);
         document.getElementById('lblTotal').textContent = total.toFixed(2);
         document.getElementById('montoTotalHidden').value = total.toFixed(2);
-    }
+            }
 </script>

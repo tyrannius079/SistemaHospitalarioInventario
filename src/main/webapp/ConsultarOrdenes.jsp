@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <jsp:include page="/includes/header.jsp" />
 <jsp:include page="/includes/sidebar.jsp" />
@@ -158,7 +158,8 @@
                 
                 // Simulación de actualización exitosa AJAX
                 setTimeout(() => {
-                    const nuevoEstado = document.getElementById('mod_nuevoEstado').value;
+                    const nuevoEstadoVal = document.getElementById('mod_nuevoEstado').value;
+                    const nuevoEstadoText = document.getElementById('mod_nuevoEstado').options[document.getElementById('mod_nuevoEstado').selectedIndex].text;
                     const idOrden = document.getElementById('mod_idOrden').value;
                     
                     Swal.fire({
@@ -197,8 +198,8 @@
         const divMotivo = document.getElementById('divMotivo');
         const txtMotivo = document.getElementById('mod_observaciones');
         
-        // IHC: Si decide ANULAR, forzamos a que explique por qué.
-        if (select.value === 'ANULADA') {
+        // IHC: Si decide ANULAR, forzamos a que explique por quÃ©.
+        if (select.value === '6') {
             divMotivo.style.display = 'block';
             txtMotivo.required = true;
         } else {
