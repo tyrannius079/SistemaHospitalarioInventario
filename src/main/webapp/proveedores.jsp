@@ -28,29 +28,40 @@
                             <th>Código</th>
                             <th>RUC / NIT</th>
                             <th>Razón Social</th>
-                            <th>Contacto Principal</th>
                             <th>Teléfono</th>
+                            <th>Email</th>
                             <th>Estado</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="badge bg-secondary">PRV-0001</span></td>
-                            <td>20541236589</td>
-                            <td class="fw-bold">Distribuidora Médica S.A.C.</td>
-                            <td>Juan Pérez</td>
-                            <td>987654321</td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('PRV-0001', '20541236589', 'Distribuidora Médica S.A.C.', 'Av. La Marina 123', 'Juan Pérez', '987654321', 'ventas@distmed.com')" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('PRV-0001')" title="Inactivar">
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        <c:forEach var="prov" items="${proveedores}">
+                            <tr>
+                                <td><span class="badge bg-secondary">${prov.codigo}</span></td>
+                                <td>${prov.ruc}</td>
+                                <td class="fw-bold">${prov.razonSocial}</td>
+                                <td>${prov.telefono}</td>
+                                <td>${prov.email}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${prov.estado == 'ACTIVO'}">
+                                            <span class="badge bg-success">Activo</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('${prov.codigo}', '${prov.ruc}', '${prov.razonSocial}', '${prov.direccion}', '', '${prov.telefono}', '${prov.email}')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('${prov.codigo}')" title="Inactivar">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>
@@ -105,14 +116,6 @@
                     <!-- Fila de Contacto -->
                     <h6 class="text-uppercase text-muted fw-bold mb-3 border-bottom pb-2">Información de Contacto</h6>
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="contacto" class="form-label">Nombre del Contacto</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" id="contacto" name="contacto" placeholder="Representante de ventas">
-                            </div>
-                        </div>
-
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono *</label>
                             <div class="input-group has-validation">
@@ -207,7 +210,6 @@
         document.getElementById('ruc').value = ruc;
         document.getElementById('razonSocial').value = razon;
         document.getElementById('direccion').value = direccion;
-        document.getElementById('contacto').value = contacto;
         document.getElementById('telefono').value = telefono;
         document.getElementById('email').value = email;
         

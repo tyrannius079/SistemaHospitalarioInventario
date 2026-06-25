@@ -38,23 +38,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="badge bg-secondary">INS-0001</span></td>
-                            <td class="fw-bold">Paracetamol 500mg</td>
-                            <td>Medicamentos</td>
-                            <td>Caja x 100</td>
-                            <td class="text-danger fw-bold">50</td>
-                            <td><span class="badge bg-success fs-6">120</span></td>
-                            <td><span class="badge bg-success">Activo</span></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('INS-0001', 'Paracetamol 500mg', '1', 'Caja x 100', '50', 'Analgésico antipirético')" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('INS-0001')" title="Inactivar">
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        <c:forEach var="insumo" items="${insumos}">
+                            <tr>
+                                <td><span class="badge bg-secondary">${insumo.codigo}</span></td>
+                                <td class="fw-bold">${insumo.nombre}</td>
+                                <td>
+                                    <c:forEach var="cat" items="${categorias}">
+                                        <c:if test="${cat.idCategoria == insumo.idCategoria}">
+                                            ${cat.nombre}
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+                                <td>${insumo.unidadMedida}</td>
+                                <td class="text-danger fw-bold">${insumo.stockMinimo}</td>
+                                <td><span class="badge ${insumo.stockActual > insumo.stockMinimo ? 'bg-success' : 'bg-danger'} fs-6">${insumo.stockActual}</span></td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${insumo.estado == 'ACTIVO'}">
+                                            <span class="badge bg-success">Activo</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditar('${insumo.codigo}', '${insumo.nombre}', '${insumo.idCategoria}', '${insumo.unidadMedida}', '${insumo.stockMinimo}', '${insumo.descripcion}')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmarDesactivacion('${insumo.codigo}')" title="Inactivar">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>

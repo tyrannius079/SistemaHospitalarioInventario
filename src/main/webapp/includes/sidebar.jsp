@@ -119,7 +119,7 @@
     <ul class="list-unstyled components">
         <li class="px-4 mb-2 text-uppercase fw-bold section-title">Navegación</li>
         <li class="active">
-            <a href="${pageContext.request.contextPath}/index.jsp"><i class="fas fa-chart-pie main-icon me-2"></i> Dashboard Global</a>
+            <a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-chart-pie main-icon me-2"></i> Dashboard Global</a>
         </li>
         
         <!-- Sección Catálogos Maestros -->
@@ -129,9 +129,9 @@
                 <span><i class="fas fa-database main-icon me-2"></i> Datos Maestros</span>
             </a>
             <ul class="collapse list-unstyled" id="submenuCatalogos">
-                <li><a href="${pageContext.request.contextPath}/categorias.jsp"><i class="fas fa-tags me-2"></i> Categorías</a></li>
-                <li><a href="${pageContext.request.contextPath}/insumos.jsp"><i class="fas fa-pills me-2"></i> Catálogo Insumos</a></li>
-                <li><a href="${pageContext.request.contextPath}/proveedores.jsp"><i class="fas fa-building me-2"></i> Proveedores</a></li>
+                <li><a href="${pageContext.request.contextPath}/categoria"><i class="fas fa-tags me-2"></i> Categorías</a></li>
+                <li><a href="${pageContext.request.contextPath}/insumo"><i class="fas fa-pills me-2"></i> Catálogo Insumos</a></li>
+                <li><a href="${pageContext.request.contextPath}/proveedor"><i class="fas fa-building me-2"></i> Proveedores</a></li>
             </ul>
         </li>
 
@@ -142,11 +142,11 @@
                 <span><i class="fas fa-shopping-cart main-icon me-2"></i> Adquisiciones</span>
             </a>
             <ul class="collapse list-unstyled" id="submenuCompras">
-                <li><a href="${pageContext.request.contextPath}/registrarProforma.jsp"><i class="fas fa-file-signature me-2"></i> Solicitar Proforma</a></li>
-                <li><a href="${pageContext.request.contextPath}/compararProformas.jsp"><i class="fas fa-balance-scale me-2"></i> Cuadro Comparativo</a></li>
-                <li><a href="${pageContext.request.contextPath}/RegistrarOrdenCompra.jsp"><i class="fas fa-file-invoice-dollar me-2"></i> Emitir Orden (OC)</a></li>
-                <li><a href="${pageContext.request.contextPath}/ConsultarOrdenes.jsp"><i class="fas fa-search-dollar me-2"></i> Seguimiento OCs</a></li>
-                <li><a href="${pageContext.request.contextPath}/GestionarPresupuestos.jsp"><i class="fas fa-chart-line me-2"></i> Presupuestos</a></li>
+                <li><a href="${pageContext.request.contextPath}/proforma?action=nueva"><i class="fas fa-file-signature me-2"></i> Solicitar Proforma</a></li>
+                <li><a href="${pageContext.request.contextPath}/proforma?action=comparar"><i class="fas fa-balance-scale me-2"></i> Cuadro Comparativo</a></li>
+                <li><a href="${pageContext.request.contextPath}/orden-compra"><i class="fas fa-file-invoice-dollar me-2"></i> Emitir Orden (OC)</a></li>
+                <li><a href="${pageContext.request.contextPath}/orden-compra?action=listar"><i class="fas fa-search-dollar me-2"></i> Seguimiento OCs</a></li>
+                <li><a href="${pageContext.request.contextPath}/presupuestos"><i class="fas fa-chart-line me-2"></i> Presupuestos</a></li>
             </ul>
         </li>
 
@@ -157,10 +157,10 @@
                 <span><i class="fas fa-boxes main-icon me-2"></i> Operaciones</span>
             </a>
             <ul class="collapse list-unstyled" id="submenuInventario">
-                <li><a href="${pageContext.request.contextPath}/ConsultarStock.jsp"><i class="fas fa-list me-2"></i> Stock Valorizado</a></li>
-                <li><a href="${pageContext.request.contextPath}/RegistrarEntrada.jsp"><i class="fas fa-arrow-down me-2"></i> Recepción Física</a></li>
-                <li><a href="${pageContext.request.contextPath}/RegistrarAjuste.jsp"><i class="fas fa-arrow-up me-2"></i> Despachos / Mermas</a></li>
-                <li><a href="${pageContext.request.contextPath}/ConsultarAlertas.jsp"><i class="fas fa-exclamation-triangle me-2"></i> Alertas Sanitarias</a></li>
+                <li><a href="${pageContext.request.contextPath}/inventario?action=stock"><i class="fas fa-list me-2"></i> Stock Valorizado</a></li>
+                <li><a href="${pageContext.request.contextPath}/inventario"><i class="fas fa-arrow-down me-2"></i> Recepción Física</a></li>
+                <li><a href="${pageContext.request.contextPath}/ajuste-inventario"><i class="fas fa-arrow-up me-2"></i> Despachos / Mermas</a></li>
+                <li><a href="${pageContext.request.contextPath}/alertas"><i class="fas fa-exclamation-triangle me-2"></i> Alertas Sanitarias</a></li>
             </ul>
         </li>
 

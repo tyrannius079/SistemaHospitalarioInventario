@@ -25,17 +25,18 @@
                     <label class="form-label fw-bold small text-muted">Seleccione los Proveedores a comparar:</label>
                     <!-- En un sistema real esto usaría Select2 multiple -->
                     <select class="form-select" id="proveedoresMulti" multiple size="3">
-                        <option value="1" selected>PRV-0001 - Distribuidora Médica S.A.C.</option>
-                        <option value="2" selected>PRV-0002 - Insumos Hospitalarios Perú</option>
-                        <option value="3">PRV-0003 - Global Pharma S.A.</option>
+                        <c:forEach var="prov" items="${proveedores}">
+                            <option value="${prov.idProveedor}" selected>${prov.codigo} - ${prov.razonSocial}</option>
+                        </c:forEach>
                     </select>
                 </div>
                 <div class="col-md-5">
                     <label class="form-label fw-bold small text-muted">Filtrar por Categoría de Insumo:</label>
                     <select class="form-select" id="categoriaFiltro">
                         <option value="TODOS" selected>Todas las categorías</option>
-                        <option value="1">Medicamentos</option>
-                        <option value="2">Material Médico</option>
+                        <c:forEach var="cat" items="${categorias}">
+                            <option value="${cat.idCategoria}">${cat.nombre}</option>
+                        </c:forEach>
                     </select>
                 </div>
                 <div class="col-md-2 text-end">

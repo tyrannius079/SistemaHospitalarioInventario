@@ -35,8 +35,9 @@
                         <label for="idProveedor" class="form-label">Proveedor *</label>
                         <select class="form-select" id="idProveedor" name="idProveedor" required>
                             <option value="" selected disabled>Seleccione un proveedor...</option>
-                            <option value="1">PRV-0001 - Distribuidora Médica S.A.C.</option>
-                            <option value="2">PRV-0002 - Insumos Hospitalarios Perú</option>
+                            <c:forEach var="prov" items="${proveedores}">
+                                <option value="${prov.idProveedor}">${prov.codigo} - ${prov.razonSocial}</option>
+                            </c:forEach>
                         </select>
                         <div class="invalid-feedback">Seleccione un proveedor.</div>
                     </div>
@@ -110,6 +111,8 @@
 <jsp:include page="/includes/footer.jsp" />
 
 <script>
+    const insumosOptions = `<c:forEach var="ins" items="${insumos}"><option value="${ins.idInsumo}">${ins.codigo} - ${ins.nombre}</option></c:forEach>`;
+
     document.addEventListener("DOMContentLoaded", function() {
         
         // Asignar fecha mínima hoy a "Validez hasta"
@@ -159,9 +162,7 @@
             <td>
                 <select class="form-select" name="idInsumo[]" required>
                     <option value="" selected disabled>Buscar insumo...</option>
-                    <option value="1">INS-0001 - Paracetamol 500mg</option>
-                    <option value="2">INS-0002 - Amoxicilina 250mg</option>
-                    <option value="3">INS-0003 - Jeringas 5ml</option>
+                    \${insumosOptions}
                 </select>
                 <div class="invalid-feedback">Seleccione.</div>
             </td>
