@@ -74,7 +74,11 @@ public class OrdenCompraServlet extends HttpServlet {
                     }
             }
             bean.setIdEstado(idEstado);
-            bean.setObservaciones("Estado actualizado a " + estado);
+            String obs = safeText(request.getParameter("observaciones"));
+            if (obs.isEmpty()) {
+                obs = "Estado actualizado a " + estado + " (" + new java.util.Date().getTime() + ")";
+            }
+            bean.setObservaciones(obs);
             
             boolean ok = ordenCompraServices.modificarOrden(bean);
             if (ok) {

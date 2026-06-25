@@ -56,7 +56,11 @@ public class MovimientoInventarioDAO {
 
     public List<MovimientoInventarioBean> getMovimientos() {
         List<MovimientoInventarioBean> lista = new ArrayList<>();
-        String sql = "SELECT * FROM TB_MovimientoInventario ORDER BY idMovimiento DESC";
+        String sql = "SELECT m.*, i.nombre as nombreInsumo, l.numeroLote " +
+                     "FROM TB_MovimientoInventario m " +
+                     "JOIN TB_Insumo i ON m.idInsumo = i.idInsumo " +
+                     "LEFT JOIN TB_Lote l ON m.idLote = l.idLote " +
+                     "ORDER BY m.idMovimiento DESC";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -72,7 +76,11 @@ public class MovimientoInventarioDAO {
 
     public List<MovimientoInventarioBean> consultarMovimientos(int idInsumo) {
         List<MovimientoInventarioBean> lista = new ArrayList<>();
-        String sql = "SELECT * FROM TB_MovimientoInventario WHERE idInsumo = ? ORDER BY idMovimiento DESC";
+        String sql = "SELECT m.*, i.nombre as nombreInsumo, l.numeroLote " +
+                     "FROM TB_MovimientoInventario m " +
+                     "JOIN TB_Insumo i ON m.idInsumo = i.idInsumo " +
+                     "LEFT JOIN TB_Lote l ON m.idLote = l.idLote " +
+                     "WHERE m.idInsumo = ? ORDER BY m.idMovimiento DESC";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idInsumo);
@@ -101,6 +109,19 @@ public class MovimientoInventarioDAO {
         bean.setTipoMovimiento(rs.getString("tipoMovimiento"));
         bean.setCantidad(rs.getInt("cantidad"));
         bean.setObservaciones(rs.getString("observaciones"));
+        bean.setObservaciones(rs.getString("observaciones"));
+        
+        try {
+            bean.setNombreInsumo(rs.getString("nombreInsumo"));
+        } catch (SQLException e) {
+            // Ignore if column doesn't exist in some generic queries
+        }
+        try {
+            bean.setNumeroLote(rs.getString("numeroLote"));
+        } catch (SQLException e) {
+            // Ignore if column doesn't exist
+        }
+        
         return bean;
     }
 }

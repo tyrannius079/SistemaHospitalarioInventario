@@ -52,17 +52,23 @@
                                         <c:when test="${orden.nombreEstado == 'RECEPCIONADA'}">
                                             <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> RECEPCIONADA</span>
                                         </c:when>
-                                        <c:when test="${orden.nombreEstado == 'ANULADA'}">
-                                            <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> ANULADA</span>
+                                        <c:when test="${orden.nombreEstado == 'ANULADA' || orden.nombreEstado == 'CANCELADA'}">
+                                            <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> ${orden.nombreEstado}</span>
                                         </c:when>
+                                        <c:when test="${orden.nombreEstado == 'PENDIENTE'}">
+                                            <span class="badge bg-secondary"><i class="fas fa-hourglass-half me-1"></i> PENDIENTE</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge bg-dark"><i class="fas fa-info-circle me-1"></i> ${orden.nombreEstado}</span>
+                                        </c:otherwise>
                                     </c:choose>
                                 </td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline-info" title="Imprimir" onclick="imprimirPDF('${orden.codigoFormateado}')">
                                         <i class="fas fa-file-pdf"></i>
                                     </button>
-                                    <c:if test="${orden.nombreEstado != 'ANULADA' && orden.nombreEstado != 'RECEPCIONADA'}">
-                                        <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('${orden.codigoFormateado}', '${orden.nombreEstado}')">
+                                    <c:if test="${orden.nombreEstado != 'ANULADA' && orden.nombreEstado != 'CANCELADA' && orden.nombreEstado != 'RECEPCIONADA'}">
+                                        <button class="btn btn-sm btn-outline-secondary" title="Actualizar Estado" onclick="abrirModalEstado('${orden.idOrdenCompra}', '${orden.codigoFormateado}', '${orden.nombreEstado}')">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
                                     </c:if>
@@ -105,6 +111,8 @@
                         <label for="mod_nuevoEstado" class="form-label fw-bold">Nuevo Estado *</label>
                         <select class="form-select border-primary" id="mod_nuevoEstado" name="estado" required onchange="validarMotivo()">
                             <option value="" disabled selected>Seleccione transición...</option>
+                            <option value="PENDIENTE">⏳ Pendiente</option>
+                            <option value="EMITIDA">📄 Emitir Orden</option>
                             <option value="APROBADA">✅ Aprobar Orden</option>
                             <option value="ANULADA">❌ Anular Orden</option>
                         </select>
@@ -158,12 +166,12 @@
         }, false);
     });
 
-    function abrirModalEstado(idOrden, estadoActual) {
+    function abrirModalEstado(idOrden, codigoFormateado, estadoActual) {
         document.getElementById('formActualizarEstado').reset();
         document.getElementById('formActualizarEstado').classList.remove('was-validated');
         
         document.getElementById('mod_idOrden').value = idOrden;
-        document.getElementById('mod_lblOrden').textContent = idOrden;
+        document.getElementById('mod_lblOrden').textContent = codigoFormateado;
         document.getElementById('mod_estadoActual').value = estadoActual;
         
         // Esconder motivo
@@ -179,8 +187,7 @@
         const divMotivo = document.getElementById('divMotivo');
         const txtMotivo = document.getElementById('mod_observaciones');
         
-        // IHC: Si decide ANULAR, forzamos a que explique por quÃ©.
-        if (select.value === '6') {
+        if (select.value === 'ANULADA') {
             divMotivo.style.display = 'block';
             txtMotivo.required = true;
         } else {

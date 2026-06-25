@@ -142,9 +142,9 @@
                 <span><i class="fas fa-shopping-cart main-icon me-2"></i> Adquisiciones</span>
             </a>
             <ul class="collapse list-unstyled" id="submenuCompras">
-                <li><a href="#"><i class="fas fa-clipboard-list me-2"></i> Solicitar Requerimiento <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">En construcción</span></a></li>
+                <!-- <li><a href="#"><i class="fas fa-clipboard-list me-2"></i> Solicitar Requerimiento <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">En construcción</span></a></li> -->
                 <li><a href="${pageContext.request.contextPath}/proforma?action=nueva"><i class="fas fa-file-signature me-2"></i> Solicitar Proforma</a></li>
-                <li><a href="${pageContext.request.contextPath}/proforma?action=comparar"><i class="fas fa-balance-scale me-2"></i> Cuadro Comparativo <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">En construcción</span></a></li>
+                <!-- <li><a href="${pageContext.request.contextPath}/proforma?action=comparar"><i class="fas fa-balance-scale me-2"></i> Cuadro Comparativo <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">En construcción</span></a></li> -->
                 <li><a href="${pageContext.request.contextPath}/orden-compra"><i class="fas fa-file-invoice-dollar me-2"></i> Emitir Orden (OC)</a></li>
                 <li><a href="${pageContext.request.contextPath}/orden-compra?action=listar"><i class="fas fa-search-dollar me-2"></i> Seguimiento OCs</a></li>
                 <li><a href="${pageContext.request.contextPath}/presupuestos"><i class="fas fa-chart-line me-2"></i> Presupuestos</a></li>

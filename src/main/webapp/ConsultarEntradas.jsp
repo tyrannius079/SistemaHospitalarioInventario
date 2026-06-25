@@ -88,8 +88,12 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td><span class="fw-bold">ID: ${mov.idInsumo}</span></td>
-                                            <td>ID: ${mov.idLote}</td>
+                                            <td>
+                                                <span class="fw-bold">${mov.nombreInsumo != null ? mov.nombreInsumo : 'Insumo #'.concat(mov.idInsumo)}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary">${mov.numeroLote != null ? mov.numeroLote : (mov.idLote != 0 ? 'ID: '.concat(mov.idLote) : '-')}</span>
+                                            </td>
                                             <td>${mov.idOrdenCompra != 0 ? mov.idOrdenCompra : '-'}</td>
                                             <td>
                                                 <span class="badge ${mov.tipoMovimiento == 'ENTRADA' ? 'bg-success' : 'bg-danger'} rounded-pill fs-6">
